@@ -1,1 +1,1 @@
-En este archivo TXT debe guardar todos los archivos que le fueron provistos en la exportación. 
+En esta carpeta debe guardar todos los archivos que le fueron provistos en la exportación. 
