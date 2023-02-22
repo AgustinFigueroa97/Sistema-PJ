@@ -22,7 +22,7 @@ INSTRUCCIONES PARA EL USO DEL PROGRAMA.
 
 			- Filtrar por fecha: esta opción permite elegir un rango de fechas donde solo se visualice el chat por el rango establecido, por ejemplo: 
 			2/11/22 - 6/12/22. 
-			- Agregar información a los participantes: esta opción permite agregar números de teléfonos, nombres o cualquier otra información que se 			 considere relevante para cada participante del chat, basta con seleccionar la persona e ir agregando información con el botón agregar. 
+			- Agregar información a los participantes: esta opción permite agregar números de teléfonos, nombres o cualquier otra información que se considere relevante para cada participante del chat, basta con seleccionar la persona e ir agregando información con el botón agregar. 
 
 		- Inicie el parsing haciendo click en el botón Iniciar, esto hará que, en la zona de chats, se pueda visualizar toda la información del mismo, con la configuración elegida en el paso anterior. 
 
