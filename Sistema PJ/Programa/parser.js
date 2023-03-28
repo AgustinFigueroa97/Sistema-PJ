@@ -73,7 +73,7 @@
     
             let fecha = sublinea.split(' -'); // Corto hasta la fecha 
     
-            if(ERfechayhora1.test(fecha[0].replace(/\u00A0/, " ")) || ERfechayhora2.test(fecha[0].replace(/\u00A0/, " "))){
+            if(ERfechayhora1.test(fecha[0].replace(/\s/g, " ")) || ERfechayhora2.test(fecha[0].replace(/\s/g, " "))){
     
                 let dospuntos = ":";
     
@@ -133,7 +133,7 @@
 
         let fechaytexto; 
 
-        if(ERfechayhora.test(fechaytextoAux[0].replace(/\u00A0/, " "))){
+        if(ERfechayhora.test(fechaytextoAux[0].replace(/\s/g, " "))){
             fechaytexto = sublinea.split('. -');
         }else{
             fechaytexto = sublinea.split(' -');
@@ -699,7 +699,7 @@
 
         let flagFiltro = usaFiltro(); 
 
-        /* Nota: La funcion .replace(/\u00A0/, " ") sirve para eliminar caracteres basura
+        /* Nota: La funcion .replace(/\s/g, " ") sirve para eliminar caracteres basura
         Si hay otro error, puede que no haya aplicado esta funcion en algun lado, veremos :B
         */
         
@@ -709,23 +709,24 @@
     
             let fecha = sublinea.split(' -'); // Corto hasta la fecha 
     
-            //console.log("Haber lo que tiene fecha en la posicion 0",fecha[0]);
+            //console.log("Haber lo que tiene fecha en la posicion 0:"+"--"+fecha[0]+"--");
     
-            //console.log("Haber lo que tiene fecha en la posicion 1",fecha[1]);
+            //console.log("Haber lo que tiene fecha en la posicion 1:"+"--"+fecha[1]+"--");
     
             // Control para ver si chequeo o no cadena, para luego hacer concatenacion
     
-            //console.log("Este es er1 "+ !ERfechayhora1.test(fecha[0].replace(/\u00A0/, " ")));
+            //console.log("Este es er1 :"+ !ERfechayhora1.test(fecha[0].replace(/\s/g, " ")));
     
-            //console.log("Este es er2 "+ !ERfechayhora2.test(fecha[0].replace(/\u00A0/, " ")));
+            //console.log("Este es er2 :"+ !ERfechayhora2.test(fecha[0].replace(/\s/g, " ")));
+
+            console.log("Antes en vez de /\s/g usaba /\u00A0/ no se cual será su diferencia bien, pero no se rompe con eso es una cagada de los caracteres nulo");
     
-            if(!(ERfechayhora1.test(fecha[0].replace(/\u00A0/, " ")) || ERfechayhora2.test(fecha[0].replace(/\u00A0/, " ")))){ // Si es distinto de fecha 
+            if(!(ERfechayhora1.test(fecha[0].replace(/\s/g, " ")) || ERfechayhora2.test(fecha[0].replace(/\s/g, " ")))){ // Si es distinto de fecha 
     
                 console.log('Es algo distinto de fecha');
                 console.log("El texto que tiene es: "+ sublinea);
                 
                 if(flag === 0){ // O sea antes había una fecha, es la primera vez que entra. 
-    
                     actualIndex = index -1; 
                     line[index-1] = line[index-1].concat('\n' + line[index]);
                     line[index].split(index,1); // Luego de haber concatenado, elimino el indice actual, ya que en mi arreglo no lo necesito mas. 
@@ -775,7 +776,7 @@
                         Lineas(sublineaAuxiliar);
                     }
         
-                    if(ERfechayhora1.test(line[index+1].split(' -')[0].replace(/\u00A0/, " ")) || ERfechayhora2.test(line[index+1].split(' -')[0].replace(/\u00A0/, " "))){ // Si lo que viene despues es fecha, muestro la fecha actual
+                    if(ERfechayhora1.test(line[index+1].split(' -')[0].replace(/\s/g, " ")) || ERfechayhora2.test(line[index+1].split(' -')[0].replace(/\s/g, " "))){ // Si lo que viene despues es fecha, muestro la fecha actual
                         Lineas(line[index]);
                     }
     
@@ -812,7 +813,7 @@
                         Lineas(sublineaAuxiliar);
                     }
                     
-                    if((toMs(fechasolita[0]) >= preDate && toMs(fechasolita[0]) <= postDate) && (ERfechayhora1.test(line[index+1].split(' -')[0].replace(/\u00A0/, " ")) || ERfechayhora2.test(line[index+1].split(' -')[0].replace(/\u00A0/, " "))) ){ // Si lo que viene despues es fecha, muestro la fecha actual
+                    if((toMs(fechasolita[0]) >= preDate && toMs(fechasolita[0]) <= postDate) && (ERfechayhora1.test(line[index+1].split(' -')[0].replace(/\s/g, " ")) || ERfechayhora2.test(line[index+1].split(' -')[0].replace(/\s/g, " "))) ){ // Si lo que viene despues es fecha, muestro la fecha actual
                         //console.log("Esta entrando por acá, es raro");
                         Lineas(line[index]);
                     }
