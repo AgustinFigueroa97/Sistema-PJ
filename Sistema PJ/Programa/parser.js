@@ -713,13 +713,13 @@
     
             //console.log("Haber lo que tiene fecha en la posicion 1:"+"--"+fecha[1]+"--");
     
-            // Control para ver si chequeo o no cadena, para luego hacer concatenacion
+            //Control para ver si chequeo o no cadena, para luego hacer concatenacion
     
             //console.log("Este es er1 :"+ !ERfechayhora1.test(fecha[0].replace(/\s/g, " ")));
     
             //console.log("Este es er2 :"+ !ERfechayhora2.test(fecha[0].replace(/\s/g, " ")));
 
-            console.log("Antes en vez de /\s/g usaba /\u00A0/ no se cual será su diferencia bien, pero no se rompe con eso es una cagada de los caracteres nulo");
+            //console.log("Antes en vez de /\s/g usaba /\u00A0/ no se cual será su diferencia bien, pero no se rompe con eso es una cagada de los caracteres nulo");
     
             if(!(ERfechayhora1.test(fecha[0].replace(/\s/g, " ")) || ERfechayhora2.test(fecha[0].replace(/\s/g, " ")))){ // Si es distinto de fecha 
     
@@ -757,6 +757,8 @@
                 
                 sublineaAuxiliar = line[index - (index-actualIndex)];
 
+                console.log("A VER LO QUE TIENE ESTA SUBLINEA AUXILIAR: "+sublineaAuxiliar);
+                
                 if(!flagFiltro){ // O sea que no uso el filtro. Hago lo normal 
                     if(index === line.length-2){
                         Lineas(sublineaAuxiliar);
@@ -985,7 +987,7 @@
     
         console.log(ArrayNameyText);
         
-    })
+    });
     
     
     let BtnIniciar = document.getElementById("Comenzar");
@@ -1019,7 +1021,17 @@
                 timer: 800
             })
     
-            cargarFront(line);
+            /* Esta variable copiaLineas, es necesario para no trabajar directamente con el array line, dado que se va modificando, por lo cual no trabajamos sobre la referencia, sino sobre la copia por ejecución, porque si trabajaramos sobre el mismo array que es line, ese arreglo por ejecución va a hacer modificado y por tanto cuando se de iniciar nuevamente, trabajeremos sobre ese modificado y no es lo que se pretende*/
+            /* De todas formas este es un control, por si le dan iniciar iniciar iniciar varias veces sin recargar la pagina, digamos para hacerlo mas robusto */
+
+            let copiaLineas = [];
+
+            for (let index = 0; index < line.length; index++) {
+                copiaLineas[index] = line[index];
+            }
+            
+            cargarFront(copiaLineas);
+
         }else{
             Swal.fire({
                 icon: 'error',
