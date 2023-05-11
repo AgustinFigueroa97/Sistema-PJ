@@ -59,7 +59,7 @@
         4/8/20 8:33 a. m. - / 4/8/20 8:33 p. m. -
         */
 
-        let ERfechayhora1 = /^\d{1,2}\/\d{1,2}\/\d{2,4} \d{1,2}:\d{2}$/;
+        let ERfechayhora1 = /^\d{1,2}\/\d{1,2}\/\d{2,4}(,)? \d{1,2}:\d{2}$/;
     
         let ERfechayhora2 = /^\d{1,2}\/\d{1,2}\/\d{2,4} \d{1,2}:\d{2} (p. m.|a. m.)$/;
     
@@ -236,8 +236,9 @@
             divBg_white1.appendChild(mb1);
     
             let textGray1 = document.createElement("small");
-            textGray1.classList.add('text-gray-500','font-light');
-    
+            //textGray1.classList.add('text-gray-500','font-light');
+            textGray1.classList.add('text-gray-500','font-light','overflow-hidden', 'overflow-ellipsis', 'block');
+            
             //console.log("Nombre y Textoooo"+ nombreytexto[1]);
     
             if (nombreytexto[1] === undefined) {
@@ -464,8 +465,9 @@
             divBg_white2.appendChild(mb2);
     
             let textGray2 = document.createElement("small");
-            textGray2.classList.add('text-black','font-light');
-    
+            //textGray2.classList.add('text-black','font-light');
+            textGray2.classList.add('text-black','font-light','overflow-hidden', 'overflow-ellipsis', 'block');
+            
             if (nombreytexto[1] === undefined) {
                 textGray2.textContent = "";
             }
@@ -691,7 +693,7 @@
 
         let postDate;
     
-        let ERfechayhora1 = /^\d{1,2}\/\d{1,2}\/\d{2,4} \d{1,2}:\d{2}$/;
+        let ERfechayhora1 = /^\d{1,2}\/\d{1,2}\/\d{2,4}(,)? \d{1,2}:\d{2}$/;
     
         let ERfechayhora2 = /^\d{1,2}\/\d{1,2}\/\d{2,4} \d{1,2}:\d{2} (p. m.|a. m.)$/;
     
