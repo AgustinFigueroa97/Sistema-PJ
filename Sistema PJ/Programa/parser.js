@@ -1,13 +1,3 @@
-// Metodo para escribir texto en un elemento. document.createElement(element);
-    // Ejemplo:
-
-// Escribir texto en un elemento: element.textContext = texto 
-
-// Escribir HTML en un elemento: element.innerHTML = codigo HTML
-
-// Añadir un elemento al DOM: parent.appendChild(element) (hay mas formas de hacerlo) 
-    // parent es el padre del elemento que queremos insertar.
-    
     let line = new Array();
 
     let nombres = new Array(); // Almacena los nombres de los participantes del chat 
@@ -15,6 +5,9 @@
     let ArrayNameyText = new Array();
     
     let flagArchivo = 0;
+
+    let ERfechayhora = /\d{1,2}\/\d{1,2}\/\d{2,4}(,)? \d{1,2}:\d{2}( (p. m.|a. m.))?/; // Si aparece un nuevo formato en una exportación, modificar un poco esta ER, no sacando, sino agregando y en general agregar con ? es decir 0 o 1 vez, para que los demás formatos se sigan respetando. 
+    
 
     function download(filename, html) {
 
@@ -28,11 +21,12 @@
     }
     
     function funExportar(){
-
+        
+        // No se tanto web, así que hacer esto lo vi viable xD
         if(flagArchivo === 1){
             let divChat = document.getElementById("idContenido").innerHTML;
             let cadenahtml = ""; 
-            cadenahtml += "<!DOCTYPE html><html lang="+'"en"'+"> <head> <meta charset="+'"UTF-8"'+"><meta http-equiv="+"'X-UA-Compatible'"+" content="+"'IE=edge'"+"><meta name="+"'viewport'"+" content="+"'width=device-width, initial-scale=1.0'"+"><title>Document</title> "+"<script src="+"'https://cdn.tailwindcss.com'"+"></script>"+"<link rel="+"'stylesheet'"+" href="+"'style.css'"+"></link>"+"<link href="+"'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css'"+" rel="+"'stylesheet'"+" integrity="+"'sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC'"+" crossorigin="+"'anonymous'"+">"+"<script src="+"'https://kit.fontawesome.com/fea845fb58.js'"+" crossorigin="+"'anonymous'"+"></script>"+"</head><body>"+ "<section class="+"'h-screen flex overflow-hidden'"+">" + "<div class="+"'bg-white w-2/12 p-6'"+"></div>"+ "<div class="+"'cuerpo w-8/12 overflow-auto'"+">" +" <p class="+"'gradiente px-20 py-6'"+ "style="+"'text-align: center; font-size: xx-large;'"+"> Chat de WhatsApp</p> <hr></hr>" +"<br>" +`${divChat}`+"</div>"+ "<div class="+"'bg-white w-2/12 p-6'"+"></div>" +"</section>"+"</body></html>";
+            cadenahtml += "<!DOCTYPE html><html lang="+'"en"'+"> <head> <meta charset="+'"UTF-8"'+"><meta http-equiv="+"'X-UA-Compatible'"+" content="+"'IE=edge'"+"><meta name="+"'viewport'"+" content="+"'width=device-width, initial-scale=1.0'"+"><title>Chat Exportado</title> "+"<script src="+"'https://cdn.tailwindcss.com'"+"></script>"+"<link rel="+"'stylesheet'"+" href="+"'style.css'"+"></link>"+"<link href="+"'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css'"+" rel="+"'stylesheet'"+" integrity="+"'sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC'"+" crossorigin="+"'anonymous'"+">"+"<script src="+"'https://kit.fontawesome.com/fea845fb58.js'"+" crossorigin="+"'anonymous'"+"></script>"+"</head><body>"+ "<section class="+"'h-screen flex overflow-hidden'"+">" + "<div class="+"'bg-white w-2/12 p-6'"+"></div>"+ "<div class="+"'cuerpo w-8/12 overflow-auto'"+">" +" <p class="+"'gradiente px-20 py-6'"+ "style="+"'text-align: center; font-size: xx-large;'"+"> Chat de WhatsApp</p> <hr></hr>" +"<br>" +`${divChat}`+"</div>"+ "<div class="+"'bg-white w-2/12 p-6'"+"></div>" +"</section>"+"</body></html>";
             let filename = "ChatDeWhatsapp.html";
             download(filename, cadenahtml);
         }else {
@@ -44,7 +38,7 @@
         }
     }
     
-
+    
     function SeleccionarNombre() {
         let selection = document.getElementById("Nombres_Personas");
         return selection.options[selection.selectedIndex];
@@ -53,16 +47,23 @@
 
     function guardarNombres(lineas){
       
-        /* Acá tenemos dos clases de expresiones regulares porque, consideramos el caso de que whatsapp haya hecho la exportación con el formato de fecha 
-        3/11/22 8:48 - 
-        o así
-        4/8/20 8:33 a. m. - / 4/8/20 8:33 p. m. -
-        */
+        //console.log(lineas);
 
+        /* 
+        
         let ERfechayhora1 = /^\d{1,2}\/\d{1,2}\/\d{2,4}(,)? \d{1,2}:\d{2}$/;
     
-        let ERfechayhora2 = /^\d{1,2}\/\d{1,2}\/\d{2,4} \d{1,2}:\d{2} (p. m.|a. m.)$/;
-    
+        let ERfechayhora2 = /^\d{1,2}\/\d{1,2}\/\d{2,4} \d{1,2}:\d{2} (p. m.|a. m.)$/; 
+        
+        Antes hacía uso de estas dos expresiones regulares, ahora toda se puede compactar en una sola que es: 
+
+        let ERfechayhora1 = /^\d{1,2}\/\d{1,2}\/\d{2,4}(,)? \d{1,2}:\d{2}( (p. m.|a. m.))?$/;
+
+        Observemos que en esta última parte ( (p. m.|a. m.))? se deja un espacio al inicio, o sea antes del segundo parentesis ( (p. ... porque en caso de que no haya eso de pm am 
+        Se saltea todo eso de am pm pero si hay, hay un espacio y luego aparece am y pm. 
+        
+        */
+
         let arrayNombres = new Array();
     
         let primeraVez = 0; 
@@ -73,7 +74,7 @@
     
             let fecha = sublinea.split(' -'); // Corto hasta la fecha 
     
-            if(ERfechayhora1.test(fecha[0].replace(/\s/g, " ")) || ERfechayhora2.test(fecha[0].replace(/\s/g, " "))){
+            if(ERfechayhora.test(fecha[0].replace(/\s/g, " "))){ 
     
                 let dospuntos = ":";
     
@@ -105,10 +106,12 @@
     }
     
     function Lineas(array){
+
+        // Acá llegan los mensajes con las fechas, no hay mensajes los cuales no tengan fecha, las concatenaciones correspondientes se hicieron en cargarFront. 
     
         let sublinea = array; 
 
-        let sublineaAux = array;
+        //console.log("Sublinea tiene: \n" + sublinea); 
     
         let nombreSeleccionado= SeleccionarNombre().value;
     
@@ -118,63 +121,35 @@
     
         let iniciales1 = "U2";
 
-        let ERfechayhora = /^\d{1,2}\/\d{1,2}\/\d{2,4} \d{1,2}:\d{2} (p. m.|a. m.)$/;
-
-        /* Vamos a poner algo para identificar univocamente el formato de los txt */
-
-        /* El hecho de probar una fechaytextoAyx y usar sublineaAux es para verificar si estoy trabajando con el formato ese de la expresión regular ERfechayhora esto es porque podemos tener lineas de txt de la siguiente forma:
-        11/9/22 4:12 a. m. - : - No lo soporto más
-        Entonces si separo por sublinea.split(' -'); fechaytexto tendría 3 partes porque el mismo usuario agrego el - 
-        Para poder arreglar esto y hacer que independientemente del formato me quede dos partes siempre y no 3, osea la parte de la fecha y hora por un lado y el texto por el otro (junto con el nombre) decidi discriminar por esos casos, de modo que si el formato es parecido al de la ERfechayhora use un split para que siempre me quede en dos partes o si es otro formato osea como el mas normal, use el otro split. 
-
-        */
-
-        let fechaytextoAux = sublineaAux.split(' -');
-
         let fechaytexto; 
 
-        if(ERfechayhora.test(fechaytextoAux[0].replace(/\s/g, " "))){
-            fechaytexto = sublinea.split('. -');
-        }else{
-            fechaytexto = sublinea.split(' -');
-        }
+        let adicional = ""; 
 
-        //fechaytexto = sublinea.split('. -');
+        fechaytexto = sublinea.split(/\.? -/);/*  Esta expresión regular me permite particionar esta parte de un mensaje: 27/4/2022, 16:33" - "Papá: hola hijo todo bien? de esta manera en fecha y texto me quedaría por un lado toda la fecha y por otro, el nombre del auto junto con su mensaje, el hecho de haber incorporado también \.? en la ER es porque en algunos casos los mensajes estan de esta forma: 
+        30/7/20 9:36 p. m". - "Papá: hola hijo todo bien? */
 
-        //console.log("Lo que tiene sublinea luego de haber cortado | -"+ fechaytexto);
-    
         let texto = fechaytexto[1];
+
+        //console.log("Autor y mensaje: \n"+texto);
     
-        //console.log("Texto: "+texto);
-    
-        let nombreytexto = texto.split(': ');
+        let nombreytexto = texto.split(/: (.*)/); // Esta ER me permite quedarme con esta parte de un mensaje "Papá:" hola hijo todo bien? el hecho de haber utilizado una ER es porque su uso solo el split(': ') si como parte del mensaje de una conversación también aparece ": " también cortará la cadena del mensaje, y no es lo que se pretende, esta ER hace que solo corte hasta el primer ": " y luego el resto si aparece nuevamente ": " no siga cortando. 
+
+        //console.log(nombreytexto);
         
-        //console.log("Fecha: "+fechaytexto[0]);
-    
-        //console.log("Nombre o Telefono: "+ nombreytexto[0]);
-    
-        //console.log("Mensaje: "+nombreytexto[1]);
+        if(nombres.length === 1){
+            adicional = "- Actor Primario"; // Por default dejo - Actor primario, esto es porque lo único que varía en caso de que solo haya un actor es el nombre seleccionado, por lo cual si nombre+ Actor Primario es distinto de nombre seleccionado, significa que se selecciono el actor primario, caso contrario se habrá seleccioado el actor secundario. 
+        }
         
-        //console.log('\n');
-    
-        //console.log("Indice del primer for: "+index);
-        
-        // Cargo los datos dinamicos. 
-    
-        /* console.log("Nombre dentro del for:"+nombreytexto[0]);
-        console.log("Nombre Recuperado"+nombreSeleccionado); */
-        
-        if(nombreytexto[0] != " "+nombreSeleccionado){
+        if(nombreytexto[0]+adicional != " "+nombreSeleccionado){ // Solo lo cumplen los actores secundarios. 
             
             let divFlex1 = document.createElement("div");
 
             if(nombreytexto[1] != undefined){
-                divFlex1.classList.add('flex','mb-12');
+                divFlex1.classList.add('flex','mb-12'); // Mensaje de usuario
             }else{
                 divFlex1.classList.add('flex','justify-center','items-center');
             }
-           
-
+            
             id_div.appendChild(divFlex1);
     
             let divPull1 = document.createElement("div");
@@ -213,7 +188,7 @@
             if(nombreytexto[1] != undefined){ // Acá dependiendo del mensaje, tendrá un color el mensaje o otro color. 
                 divBg_white1.classList.add('bg-white','p-6','w-96','rounded-3xl','rounded-bl-none', 'shadow-sm', 'mb-2');
             }else{
-                divBg_white1.classList.add('bg-slate-200','p-6','w-full','rounded-3xl', 'shadow-sm', 'mb-2');
+                divBg_white1.classList.add('bg-slate-200','p-6','w-full','rounded-3xl', 'shadow-sm', 'mb-2'); // Color azul, o sea que no es un mensaje normal, es del sistema
             }
             
             divFlexCol1.appendChild(divBg_white1);
@@ -241,36 +216,25 @@
             
             //console.log("Nombre y Textoooo"+ nombreytexto[1]);
     
-            if (nombreytexto[1] === undefined) {
+            if (nombreytexto[1] === undefined) { // O sea que es un mensaje del sistema 
                 // Signica que no hay texto 
                 textGray1.textContent = "";
-                console.log("Entro por acá lo que tiene nombreytexto es:" + nombreytexto[1]); 
+                //console.log("Entro por acá lo que tiene nombreytexto es:" + nombreytexto[1]); 
             } else {
-                // Acá si hay texto (Corregir acá )
-                //textGray1.textContent = `${nombreytexto[1]}`;
-                
-                // Acá vendría todo lo que tiene que ver con el parsing, para saber si es o no una imagen. 
+
                 let mensaje = nombreytexto[1];
-                let arrDSplie = mensaje.split(' (archivo adjunto)');
-                console.log("A ver que tiene nombre y texto en el if:"+mensaje);
-                console.log("Posicion 1 del mensaje:(Nombre) en el if: "+arrDSplie[0]);
-                console.log("Posicion 2 del mensaje:(Extension) en el if:"+arrDSplie[1]);
-    
-                let nombreYExtension = arrDSplie[0]; // Acá esta guardado como el nombre con la extension.
-                let arrNyE = nombreYExtension.split('.'); 
-                //console.log("Nombre:"+arrNyE[0]);
-                //console.log("Extension:"+ arrNyE[1]);
-                //console.log("Arr Despues del split completo",arrDSplie);
+                let arrDSplie; 
+                let nombreYExtension; 
+                let arrNyE;
                 
-                if(arrDSplie[1] === undefined){ // Cuando corto hasta archivo adjunto, si no encuentra esa palabra en la posicion 1 da undefined, eso significa que no es ninguna archivo por lo cual lo que hago, es poner el mensaje normal. 
-                    
-                    // No hay extension, lo que implica que tenemos que mostrar el mensaje completo, o sea mostrar el small 
-                    textGray1.textContent = `${mensaje}`;
-                    divBg_white1.appendChild(textGray1);
-                    //console.log("Entro por acá lo que tiene nombreytexto es:" + nombreytexto[1]); 
-                    //console.log("Lo que tiene arrNyE"+arrNyE);
-    
-                }else{
+                if(mensaje.includes(' (archivo adjunto)')){ // Se que en esta posición hay un archivo 
+                    // Corto como corresponde... 
+                    arrDSplie = mensaje.split(' (archivo adjunto)');
+                    nombreYExtension = arrDSplie[0];
+                    arrNyE = nombreYExtension.split('.'); 
+                    let message = nombreytexto.splice(2); // Elimina los 2 primeros elementos, o sea saco el nombre de la posicion 0, y el nombre del archivo de la posicion 1, y ahora si tiene mensajes, lo junto todo. 
+                    let mensajeFinal = message.join(""); // El join me juntaria todos los mensajes que haya puesto, después del mensaje... 
+
                     // Y acá ya habría que discriminar entre las distintas extension que puedo tener y crear dinamicamente la etiqueta html que corresponda.
                     // que no había que mostrar el small sino la imagen 
                     let punto  = ".";
@@ -294,8 +258,10 @@
                         // Si anda bien, osea encuentra el archivo, hace esto. 
                         a.appendChild(archivoImg);
                         divBg_white1.appendChild(a);
+                        
+                        //Estas dos lineas que estan acá se las agrego por el hecho de que como arrDSplie es distinto de undefined lo que va a pasar es que tiene un mensaje, si bien dentro del mensaje esta inmerso el nombre de la imagen con su extensión, puede pasar que se haya escrito algo sobre la imagen, es decir se haya enviado la imagen con un texto y si no agrego esto, no se muestra, por lo cual es necesario agregarle esto para que además de mostrar la imagen, muestre el mensaje que pueda llegar a tener.
 
-                        textGray1.textContent = `${arrDSplie[1]}`;
+                        textGray1.textContent = `${mensajeFinal}`;
                         divBg_white1.appendChild(textGray1);
                         
                         // Si no hace esto. 
@@ -328,7 +294,7 @@
 
                         divBg_white1.appendChild(archivoVideo);
 
-                        textGray1.textContent = `${arrDSplie[1]}`;
+                        textGray1.textContent = `${mensajeFinal}`;
                         divBg_white1.appendChild(textGray1);
 
                         function Error_Cargar() {
@@ -376,7 +342,7 @@
                          a.appendChild(icon);
                          divBg_white1.appendChild(a);
 
-                         textGray1.textContent = `${arrDSplie[1]}`;
+                         textGray1.textContent = `${mensajeFinal}`;
                          divBg_white1.appendChild(textGray1);
 
     
@@ -391,25 +357,37 @@
                         a.setAttribute('href',"../Fuente/"+`${(arrNyE[0]+punto+arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu,"")}`);
                         a.target = true;
                         let icon = document.createElement("i");
-                        icon.classList.add('fa-solid','fa-file-lines','fa-2x'); // Tengo que agregarle el replace para eliminar los caracteres invsibles
+
+                        if(punto+arrNyE[1] === ".vcf"){ // Si es el contacto de una persona, le hago un icono distinto porque es importante. 
+                            icon.classList.add('fa-solid','fa-user','fa-2x');
+                            textGray1.textContent = `${(arrNyE[0]+punto+arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu,"")}`;
+                        }else{
+                            icon.classList.add('fa-solid','fa-file-lines','fa-2x'); 
+                            textGray1.textContent = `${mensajeFinal}`;
+                        }
                         a.appendChild(icon);
                         divBg_white1.appendChild(a);
-
-                        textGray1.textContent = `${arrDSplie[1]}`;
                         divBg_white1.appendChild(textGray1);
                         
                     }
-                    
+
+                }else{
+                    // Si no hay un archivo, tiene texto, pero no sabemos el texto no solo esta en una posición, sino en varias, por eso es que se elimina la primer posicion que corresponde al nombre y luego concateno el resto de los elementos del array, con el join... 
+                    let message = nombreytexto.splice(1);  
+                    let mensajeFinal = message.join("");    
+                    textGray1.textContent = `${mensajeFinal}`;
+                    divBg_white1.appendChild(textGray1);
                 }
-    
-    
+
             }
     
+            console.log("A ver que tiene fechaytexto[0] \n"+fechaytexto[0]); 
+            
             let textGrayHora1 = document.createElement("small");
             textGrayHora1.classList.add('text-gray-500','font-light');
             textGrayHora1.textContent = `${fechaytexto[0]}`;
-    
             divFlexCol1.appendChild(textGrayHora1);
+
         }else{
     
             let divFlex2 = document.createElement("div");
@@ -443,7 +421,7 @@
     
             let divBg_white2 = document.createElement("div");
             divBg_white2.classList.add('p-6','w-96','rounded-3xl','rounded-br-none', 'shadow-sm', 'mb-2');
-            divBg_white2.style.background = '#dcf8c6'
+            divBg_white2.style.background = '#dcf8c6';
     
             divFlexCol2.appendChild(divBg_white2);
     
@@ -467,41 +445,25 @@
             let textGray2 = document.createElement("small");
             //textGray2.classList.add('text-black','font-light');
             textGray2.classList.add('text-black','font-light','overflow-hidden', 'overflow-ellipsis', 'block');
+
             
             if (nombreytexto[1] === undefined) {
                 textGray2.textContent = "";
             }
             else {
-                // Acá si hay texto (Corregir acá )
-                //textGray1.textContent = `${nombreytexto[1]}`;
-    
-                // Acá vendría todo lo que tiene que ver con el parsing, para saber si es o no una imagen. 
+                
                 let mensaje = nombreytexto[1];
-                let arrDSplie = mensaje.split(' (archivo adjunto)');
-                console.log("A ver que tiene nombre y texto en el else:"+mensaje);
-                //console.log("A ver que tiene nombre extension:"+arrDSplie[0]);
-    
-                let nombreYExtension = arrDSplie[0];
-                let arrNyE = nombreYExtension.split('.');
-                //console.log("Nombre en el otro lado :"+arrNyE[0]);
-                //console.log("Extension en el otro lado:"+ arrNyE[1]);
-                console.log("Posicion 1 del mensaje:(Nombre) en el else: "+arrDSplie[0]);
-                console.log("Posicion 2 del mensaje:(Extension) en el else:"+arrDSplie[1]);
-                //console.log("Arr Despues del split completo",arrDSplie);
-    
-                if(arrDSplie[1] === undefined){
-                    // No hay extension, lo que implica que tenemos que mostrar el mensaje completo, o sea mostrar el small 
-                    textGray2.textContent = `${mensaje}`;
-                    divBg_white2.appendChild(textGray2);
-                    //console.log("Entro por acá lo que tiene nombreytexto es:" + nombreytexto[1]); 
-                    //console.log("Lo que tiene arrNyE"+arrNyE);
-
-    
-                }else{
-                    // Y acá ya habría que discriminar entre las distintas extension que puedo tener y crear dinamicamente la etiqueta html que corresponda.
-                    // que no había que mostrar el small sino la imagen 
-                    console.log("A ver que tiene arrDSplie en el else: "+arrDSplie[1]);
-
+                let arrDSplie; 
+                let nombreYExtension; 
+                let arrNyE;
+                
+                if(mensaje.includes(' (archivo adjunto)')){ // Se que en esta posición hay un archivo 
+                    // Corto como corresponde... 
+                    arrDSplie = mensaje.split(' (archivo adjunto)');
+                    nombreYExtension = arrDSplie[0];
+                    arrNyE = nombreYExtension.split('.'); 
+                    let message = nombreytexto.splice(2);
+                    let mensajeFinal = message.join(""); 
 
                     let punto  = ".";
                     
@@ -525,7 +487,7 @@
                         divBg_white2.appendChild(a);
 
                         /* Estas dos lineas que estan acá se las agrego por el hecho de que como arrDSplie es distinto de undefined lo que va a pasar es que tiene un mensaje, si bien dentro del mensaje esta inmerso el nombre de la imagen con su extensión, puede pasar que se haya escrito algo sobre la imagen, es decir se haya enviado la imagen con un texto y si no agrego esto, no se muestra, por lo cual es necesario agregarle esto para que además de mostrar la imagen, muestre el mensaje que pueda llegar a tener. */
-                        textGray2.textContent = `${arrDSplie[1]}`;
+                        textGray2.textContent = `${mensajeFinal}`;
                         divBg_white2.appendChild(textGray2);
 
                         function Error_Cargar() {
@@ -554,7 +516,7 @@
 
                         divBg_white2.appendChild(archivoVideo);
 
-                        textGray2.textContent = `${arrDSplie[1]}`;
+                        textGray2.textContent = `${mensajeFinal}`;
                         divBg_white2.appendChild(textGray2);
 
                         function Error_Cargar() {
@@ -603,7 +565,7 @@
                          a.appendChild(icon);
                          divBg_white2.appendChild(a);
 
-                         textGray2.textContent = `${arrDSplie[1]}`;
+                         textGray2.textContent = `${mensajeFinal}`;
                          divBg_white2.appendChild(textGray2);
 
                     }else if(punto+arrNyE[1] === ".py" || punto+arrNyE[1] === ".rar" || punto+arrNyE[1] === ".zip" ||  punto+arrNyE[1] === ".html" || 
@@ -617,25 +579,37 @@
                         a.setAttribute('href',"../Fuente/"+`${(arrNyE[0]+punto+arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu,"")}`);
                         a.target = true;
                         let icon = document.createElement("i");
+
                         icon.classList.add('fa-solid','fa-file-lines','fa-2x'); // Tengo que agregarle el replace para eliminar los caracteres invsibles
+                        
+                        if(punto+arrNyE[1] === ".vcf"){
+                            icon.classList.add('fa-solid','fa-user','fa-2x');
+                            textGray2.textContent = `${(arrNyE[0]+punto+arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu,"")}`;
+                        }else{
+                            icon.classList.add('fa-solid','fa-file-lines','fa-2x'); 
+                            textGray2.textContent = `${mensajeFinal}`;
+                        }
+                        
                         a.appendChild(icon);
                         divBg_white2.appendChild(a);
-
-                        textGray2.textContent = `${arrDSplie[1]}`;
                         divBg_white2.appendChild(textGray2);
     
                     }
-                    
+
+                }else{
+
+                    let message = nombreytexto.splice(1);  
+                    let mensajeFinal = message.join("");    
+                    textGray2.textContent = `${mensajeFinal}`;
+                    divBg_white2.appendChild(textGray2);
                 }
     
             }
-    
             //divBg_white2.appendChild(textGray2);
     
             let textGrayHora2 = document.createElement("small");
             textGrayHora2.classList.add('text-gray-500','font-light','self-end');
             textGrayHora2.textContent = `${fechaytexto[0]}`;
-    
             divFlexCol2.appendChild(textGrayHora2);
         } 
 
@@ -654,28 +628,28 @@
         // desarmamos el string por los '-' los descartamos y lo transformamos en un array
         let parts = dateStr.split("/");
         let newStr;
-        console.log("parts[2] tiene: "+parts[2]); // año 
+        /* console.log("parts[2] tiene: "+parts[2]); // año 
         console.log("parts[1] tiene: "+parts[1]); // mes 
         console.log("parts[0] tiene: "+parts[0]); // dia 
-        console.log("La longitud del año es: "+parts[2].length);
+        console.log("La longitud del año es: "+parts[2].length); */
 
         if(parts[2].length === 4){
             newStr = parts[2].substring(2, parts[2].length);
-            console.log("El nuevo string tiene: "+newStr);
+            //console.log("El nuevo string tiene: "+newStr);
             return new Date(newStr, parts[1] - 1, parts[0]).getTime();
         }
         
         return new Date(parts[2], parts[1] - 1, parts[0]).getTime();
     }
 
-
+    
     function cargarFront(line){
     
         // nombres me va a permitir saber cuantos usuarios hay, y por cada usuario distinto como que puedo crear una inicial, tener en cuenta. 
     
-        let primerElemento = line[0];
+        //let primerElemento = line[0];
         
-        console.log("Primer elemento de la lista: "+primerElemento);
+        //console.log("Primer elemento de la lista: "+primerElemento);
     
         console.log('\n');
     
@@ -693,10 +667,6 @@
 
         let postDate;
     
-        let ERfechayhora1 = /^\d{1,2}\/\d{1,2}\/\d{2,4}(,)? \d{1,2}:\d{2}$/;
-    
-        let ERfechayhora2 = /^\d{1,2}\/\d{1,2}\/\d{2,4} \d{1,2}:\d{2} (p. m.|a. m.)$/;
-    
         let sublineaAuxiliar = ""; 
 
         let flagFiltro = usaFiltro(); 
@@ -710,34 +680,25 @@
             let sublinea = line[index];
     
             let fecha = sublinea.split(' -'); // Corto hasta la fecha 
-    
-            //console.log("Haber lo que tiene fecha en la posicion 0:"+"--"+fecha[0]+"--");
-    
-            //console.log("Haber lo que tiene fecha en la posicion 1:"+"--"+fecha[1]+"--");
-    
-            //Control para ver si chequeo o no cadena, para luego hacer concatenacion
-    
-            //console.log("Este es er1 :"+ !ERfechayhora1.test(fecha[0].replace(/\s/g, " ")));
-    
-            //console.log("Este es er2 :"+ !ERfechayhora2.test(fecha[0].replace(/\s/g, " ")));
 
-            //console.log("Antes en vez de /\s/g usaba /\u00A0/ no se cual será su diferencia bien, pero no se rompe con eso es una cagada de los caracteres nulo");
+            //console.log("A ver que tiene fecha: \n"+JSON.stringify(fecha)); 
+
     
-            if(!(ERfechayhora1.test(fecha[0].replace(/\s/g, " ")) || ERfechayhora2.test(fecha[0].replace(/\s/g, " ")))){ // Si es distinto de fecha 
+            if(!ERfechayhora.test(fecha[0].replace(/\s/g, " "))){ // Si es distinto de fecha 
     
-                console.log('Es algo distinto de fecha');
-                console.log("El texto que tiene es: "+ sublinea);
+                //console.log('Es algo distinto de fecha');
+                //console.log("El texto que tiene es: "+ sublinea);
                 
                 if(flag === 0){ // O sea antes había una fecha, es la primera vez que entra. 
                     actualIndex = index -1; 
                     line[index-1] = line[index-1].concat('\n' + line[index]);
                     line[index].split(index,1); // Luego de haber concatenado, elimino el indice actual, ya que en mi arreglo no lo necesito mas. 
-                    console.log("La linea actual tiene:"+line[index-1]);
+                    //console.log("La linea actual tiene:"+line[index-1]);
                     flag = 1; 
                 }else{
                     line[index - (index-actualIndex)] = line[index - (index-actualIndex)].concat('\n'+line[index]);
                     line[index].split(index,1);
-                    console.log("La linea actual tiene:"+line[index - (index-actualIndex)]);
+                    //console.log("La linea actual tiene:"+line[index - (index-actualIndex)]);
                 }
     
                 /* También va line[index+1] === "" 
@@ -759,14 +720,16 @@
                 
                 sublineaAuxiliar = line[index - (index-actualIndex)];
 
-                console.log("A VER LO QUE TIENE ESTA SUBLINEA AUXILIAR: "+sublineaAuxiliar);
+                //console.log("A VER LO QUE TIENE ESTA SUBLINEA AUXILIAR: "+sublineaAuxiliar);
                 
                 if(!flagFiltro){ // O sea que no uso el filtro. Hago lo normal 
                     if(index === line.length-2){
                         Lineas(sublineaAuxiliar);
                     }
                 }else{
+                    //console.log("Entro por acá"); 
                     if(index === line.length-2 && (toMs(fechasolita[0]) >= preDate && toMs(fechasolita[0]) <= postDate)){
+                        //console.log("Entra al if"); 
                         Lineas(sublineaAuxiliar);
                     }
                 }
@@ -776,56 +739,73 @@
 
                 if(!flagFiltro){ // O sea que no se utilizo el filtro. 
                     if(flag === 1){  // Antes venia de una concatenacion  
-                        console.log("Lo que le paso es:" + line[index]); 
+                        //console.log("Lo que le paso es:" + line[index]); 
+                        //console.log(sublineaAuxiliar); 
                         Lineas(sublineaAuxiliar);
+                        
                     }
         
-                    if(ERfechayhora1.test(line[index+1].split(' -')[0].replace(/\s/g, " ")) || ERfechayhora2.test(line[index+1].split(' -')[0].replace(/\s/g, " "))){ // Si lo que viene despues es fecha, muestro la fecha actual
+                    if(ERfechayhora.test(line[index+1].split(' -')[0].replace(/\s/g, " "))){ // Si lo que viene despues es fecha, muestro la fecha actual
                         Lineas(line[index]);
                     }
-    
+                    
                     if(index === line.length-2){ // Si es la ultima posicion, o sea lo ultimo que leo antes del "" de la ultima linea del txt 
                         Lineas(line[index]);
                     }
 
-                }else{ // Acá habría que agregar otra cosita mas!
-                    //console.log("Ups re rompio!!!");
+                }else{ 
+
+                    //console.log("Se uso el filtro y además es una fecha: \n"+JSON.stringify(fecha)); 
 
                     fechayhora = fecha[0];
-                    fechasolita = fechayhora.split(' ');
-                    //console.log("Fecha solita tiene: "+ fechasolita[0]);
+                    
+                    //console.log("A ver que tiene esto: " + fechayhora);
+
+                    fechasolita = fechayhora.split(/\,? /);
+                    console.log("Fecha solita tiene: \n"+ fechasolita[0]);
 
                     // A la fecha solita esa la accedo como fechasolita[0]
                     valorFecha = document.getElementById("Fecha").value;
                     //console.log("El valor de la fecha es: "+valorFecha);
 
-                    let fechaInicioFin = valorFecha.split('-');
-                    //console.log("Fecha Inicio: "+fechaInicioFin[0]);
-                    //console.log("Fecha Fin: "+fechaInicioFin[1]);
+                    let fechaInicioFin = valorFecha.split(' - ');
+                    console.log("Fecha Inicio: \n"+fechaInicioFin[0]);
+                    console.log("Fecha Fin: \n"+fechaInicioFin[1]);
                     
-                    preDate = toMs(fechaInicioFin[0]);
-                    //console.log("preDate es: "+preDate);
+                    preDate = toMs(fechaInicioFin[0].trim());
+                    console.log("preDate es: "+preDate);
 
-                    postDate = toMs(fechaInicioFin[1]);
-                    //console.log("postDate es: "+postDate);
-
-                    //console.log("El resultado de fecha solita es: "+resultado);
+                    postDate = toMs(fechaInicioFin[1].trim());
+                    console.log("postDate es: "+postDate);
                     
-                    if(flag === 1 && (toMs(fechasolita[0]) >= preDate && toMs(fechasolita[0]) <= postDate)){  // Antes venia de una concatenacion  
-                        //console.log("Lo que le paso es:" + line[index]); 
-                        
+                    //console.log("Fecha txt con toMS: \n"+toMs(fechasolita[0])); 
+
+                    /* if((toMs(fechasolita[0]) >= preDate && toMs(fechasolita[0]) <= postDate)){
+                        console.log("Se cumple\n"); 
+                    }
+
+                    console.log("Valor del flag: \n"+flag); 
+
+                    console.log("A ver que tiene sublineauaxiliar: \n"+sublineaAuxiliar.split(' -')[0].split(/\,? /)[0]);
+                    
+                    console.log("\n\n"); */ 
+
+                    /* En el 1° IF se debe preguntar por la fecha que fue concatenada y no la fecha actual, por eso es que tomo sublineaAuxiliar para ver su fecha, porque es en la misma donde tengo realizada la fecha y la concatenación. Luego se verifica que esa fecha concatenada se encuentre en el rango establecido por el usuario.*/
+
+                    if(flag === 1 && (toMs(sublineaAuxiliar.split(' -')[0].split(/\,? /)[0]) >= preDate && toMs(sublineaAuxiliar.split(' -')[0].split(/\,? /)[0]) <= postDate)){  
+                        console.log("Entra por acá, primer condicion");
                         Lineas(sublineaAuxiliar);
-                    }
+                    } // 1° IF 
                     
-                    if((toMs(fechasolita[0]) >= preDate && toMs(fechasolita[0]) <= postDate) && (ERfechayhora1.test(line[index+1].split(' -')[0].replace(/\s/g, " ")) || ERfechayhora2.test(line[index+1].split(' -')[0].replace(/\s/g, " "))) ){ // Si lo que viene despues es fecha, muestro la fecha actual
-                        //console.log("Esta entrando por acá, es raro");
+                    if((toMs(fechasolita[0]) >= preDate && toMs(fechasolita[0]) <= postDate) && (ERfechayhora.test(line[index+1].split(' -')[0].replace(/\s/g, " "))) ){ // Si lo que viene despues es fecha, muestro la fecha actual
+                        console.log("Esta entrando por acá, es raro");
                         Lineas(line[index]);
-                    }
+                    } // 2° IF 
                     
                     if(index === line.length-2 && (toMs(fechasolita[0]) >= preDate && toMs(fechasolita[0]) <= postDate)){ // Si es la ultima posicion, o sea lo ultimo que leo antes del "" de la ultima linea del txt 
-                        //console.log("Esta entrando por acá, mas raro todavia");
+                        console.log("Esta entrando por acá, mas raro todavia");
                         Lineas(line[index]);
-                    }
+                    } // 3° IF 
 
                 }
     
@@ -834,8 +814,6 @@
             }
     
         }   
-
-        //console.log("A ver que tiene la ultima linea"+line[line.length-2]);
     
     }
     
@@ -854,10 +832,6 @@
             reader.onload = function(e){
     
                 let contenido = e.target.result;
-    
-                // Chequear error, hay que tener en cuenta que si separo por salto de linea, podrían quedarme lineas como: Mañana voy sola o llamo a otra chica
-                
-                // Por lo cual debería de tener un control para esos casos, todavía no se me ocurre, consultar.
     
                 let textArea = document.getElementById("contenidoTextArea");
     
@@ -896,9 +870,11 @@
                 }
     
                 //console.log(ArrayNameyText);
+
+                console.log("Participantes: \n" + nombres);
                 
-                //console.log("Lista de nombres: " + nombres);
-    
+                console.log("Longitud de la lista de nombrest: \n" + nombres.length);
+                
                 const $nombresSelect = document.querySelector("#Nombres_Personas");
     
                 //console.log("Nombre select tiene:",$nombresSelect);
@@ -906,28 +882,31 @@
                 const indice = $nombresSelect.selectedIndex;
     
                 //console.log(indice);
-    
-                if(indice === -1){ // Si no hay elementos los creo. 
-                    
+
+                if(indice != -1){ // Ya existen elementos, elimino y luego abajo se creán 
+                    for (let i = $nombresSelect.options.length; i >= 0; i--) { // Este for es por si se habre otro chat en el html, sin actualizar. Por eso es que lo debo sacar lo viejo 
+                        $nombresSelect.remove(i);
+                    }
+                }
+
+                // Si no existen elementos, se crean... 
+                if(nombres.length === 1){
+                    const option1 = document.createElement('option');
+                    const option2 = document.createElement('option');
+                    option1.textContent = `${nombres[0]+"- Actor Primario"}`;
+                    option2.textContent = `${nombres[0]+"- Actor Secundario"}`;
+                    $nombresSelect.appendChild(option1);
+                    $nombresSelect.appendChild(option2);
+                }else{
                     for (let index = 0; index < nombres.length; index++) {
                         const option = document.createElement('option');
                         option.textContent = `${nombres[index]}`;
                         $nombresSelect.appendChild(option);
                         //console.log(option);
                     }
-                    
-                }else{
-                    for (let i = $nombresSelect.options.length; i >= 0; i--) {
-                        $nombresSelect.remove(i);
-                    }
-                    
-                    for (let index = 0; index < nombres.length; index++) {
-                        const option = document.createElement('option');
-                        option.textContent = `${nombres[index]}`;
-                        $nombresSelect.appendChild(option);
-                    }
-                } 
-    
+                }
+                
+                
                 document.getElementById('contenido').value = contenido;
             }
             flagArchivo = 1; 
@@ -950,7 +929,7 @@
     
     let InputArchivo = document.getElementById("archivoTexto");
     
-    console.log(InputArchivo);
+    //console.log(InputArchivo);
     
     document.getElementById("archivoTexto").addEventListener('change',(e) => {
     
@@ -987,7 +966,7 @@
     
         InputText.value = "";
     
-        console.log(ArrayNameyText);
+        //console.log(ArrayNameyText);
         
     });
     
@@ -1011,10 +990,6 @@
                 id.removeChild(id.firstChild);
             }
     
-            //console.log("Recupero el array");
-            console.log(line);
-            //console.log(nombres);
-    
             Swal.fire({
                 position: 'top-end',
                 icon: 'success',
@@ -1032,6 +1007,8 @@
                 copiaLineas[index] = line[index];
             }
             
+            console.log(copiaLineas);
+
             cargarFront(copiaLineas);
 
         }else{
