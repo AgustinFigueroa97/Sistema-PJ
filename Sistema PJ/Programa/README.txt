@@ -28,9 +28,7 @@ INSTRUCCIONES PARA EL USO DEL PROGRAMA.
 
 3° Exporte el chat con el botón Exportar Chat, es importante que lo guarde en la carpeta llamada Fuente. Esto generará una descarga de todo el chat que se haya visualizado. 
 
-4° Como último paso, copie el archivo style que se encuentra dentro de la carpeta Programa a la carpeta Fuente, este archivo permitirá visualizar mejor el archivo descargado.
-
-5° Abra el archivo HTML llamado ChatdeWhatsApp dentro de la carpeta Fuente para poder visualizar el chat.  
+4° Abra el archivo HTML llamado ChatdeWhatsApp dentro de la carpeta Fuente para poder visualizar el chat.  
 
 AUTOR DEL PROGRAMA:
 	- Agustin Figueroa
