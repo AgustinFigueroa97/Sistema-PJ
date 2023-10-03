@@ -1,1 +1,2 @@
 En esta carpeta debe guardar todos los archivos que le fueron provistos en la exportación. 
+No elimine el archivo style.css. 
