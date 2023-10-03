@@ -33,7 +33,9 @@ INSTRUCCIONES PARA EL USO DEL PROGRAMA.
 5° Puede copiar la carpeta Fuente en otro directorio y cambiarle el nombre para ser más especifico con lo que está trabajando si lo desea.
 
 OBSERVACIONES:
-	No elimine el archivo syle de Fuente, este archivo es necesario para poder mostrar los estilos del HTML generado. 
+	- Para volver a utilizar la herramienta es recomendable que elimine todos los archivos de la carpeta Fuente excepto el archivo style incorporado con el programa. Una sugerencia para poder realizar esto, es que puede utilizar el atajo ctrl+e para seleccionar todos los archivos de la carpeta Fuente, posteriormente pulse ctrl+click-izquierdo para dejar de seleccionar el archivo style y luego aprete la tecla Supr. De esta manera se eliminarán todos los archivos excepto style. 
+
+	- No es necesario que siempre elimine los archivos para poder utilizar el programa, pero si no lo hace se acumularan los chats en la carpeta llamada Fuente.  
 
 AUTOR DEL PROGRAMA:
 	- Agustin Figueroa
