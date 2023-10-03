@@ -1,6 +1,6 @@
-DESCRIPICION:
+DESCRIPCIÓN:
 
-El siguiente programa tiene como objetivo visualizar la exportación de un chat de WhatsApp. Esto lo hace a partir de los archivos que WhatsApp provee luego de generar dicha exportación. La idea fundamental consiste en tomar el archivo txt aportado y generar un archivo HTML el cual plasme el chat exportado en una interfaz mas amigable. La exportación no se muestra el chat de WhatsApp tal como lo vemos en la interfaz de WhatsApp Web por ejemplo, sino que la exportación genera un archivo de texto con el chat propiamente dicho y algunos archivos adjuntos más. Pero esto es ilegible, por lo tanto, la herramienta tiene como fin hacer que este texto plano con los archivos exportados se asemejen a la aplicación de mensajeía WhatsApp. 
+El siguiente programa tiene como objetivo visualizar la exportación de un chat de WhatsApp. Esto lo hace a partir de los archivos que WhatsApp provee luego de generar dicha exportación. La idea fundamental consiste en tomar el archivo txt aportado y generar un archivo HTML el cual plasme el chat exportado en una interfaz más amigable. La exportación no se muestra el chat de WhatsApp tal como lo vemos en la interfaz de WhatsApp Web por ejemplo, sino que la exportación genera un archivo de texto con el chat propiamente dicho y algunos archivos adjuntos más. Pero esto es ilegible, por lo tanto, la herramienta tiene como fin hacer que este texto plano con los archivos exportados se asemejen a la aplicación de mensajería WhatsApp. 
 
 ESTADO DEL PROGRAMA. 
 
@@ -30,12 +30,12 @@ INSTRUCCIONES PARA EL USO DEL PROGRAMA.
 
 4° Abra el archivo HTML llamado ChatdeWhatsApp dentro de la carpeta Fuente para poder visualizar el chat.  
 
-5° Puede copiar la carpeta Fuente en otro directorio y cambiarle el nombre para ser más especifico con lo que está trabajando si lo desea.
+5° Puede copiar la carpeta Fuente en otro directorio y cambiarle el nombre para ser más específico con lo que está trabajando si lo desea.
 
 OBSERVACIONES:
-	- Para volver a utilizar la herramienta es recomendable que elimine todos los archivos de la carpeta Fuente excepto el archivo style incorporado con el programa. Una sugerencia para poder realizar esto, es que puede utilizar el atajo ctrl+e para seleccionar todos los archivos de la carpeta Fuente, posteriormente pulse ctrl+click-izquierdo para dejar de seleccionar el archivo style y luego aprete la tecla Supr. De esta manera se eliminarán todos los archivos excepto style. 
+	- Para volver a utilizar la herramienta es recomendable que elimine todos los archivos de la carpeta Fuente excepto el archivo style incorporado con el programa. Una sugerencia para poder realizar esto, es que puede utilizar el atajo ctrl+e para seleccionar todos los archivos de la carpeta Fuente, posteriormente pulse ctrl+click-izquierdo sobre el archivo style para dejar de seleccionarlo y luego aprete la tecla Supr, de esta manera se eliminarán todos los archivos excepto style. 
 
-	- No es necesario que siempre elimine los archivos para poder utilizar el programa, pero si no lo hace se acumularan los chats en la carpeta llamada Fuente.  
+	- No es necesario que siempre elimine los archivos para poder utilizar el programa, pero si no lo hace se acumularán los chats en la carpeta llamada Fuente.  
 
 AUTOR DEL PROGRAMA:
 	- Agustin Figueroa
