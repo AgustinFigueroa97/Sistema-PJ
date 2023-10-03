@@ -31,9 +31,7 @@ INSTRUCCIONES PARA EL USO DEL PROGRAMA.
 4° Abra el archivo HTML llamado ChatdeWhatsApp dentro de la carpeta Fuente para poder visualizar el chat.  
 
 OBSERVACIONES:
-	Puede copiar la carpeta fuente en otra directorio y cambiarle el nombre para ser más especifico si lo desea. Pero es necesario incluir siempre el archivo style junto con los archivos multimedia incluidos en la exportación y el html que generó cuando exporto el chat. 
-
-	Para volver a utilizar la herramienta borre todo los archivos, pero no borre el archivo style, en caso de que se hubiera borrado vuelva a copiar sytle que se encuentre en la carpeta Programa en la carpeta Fuente.
+	Puede copiar la carpeta fuente en otra directorio y cambiarle el nombre para ser más especifico si lo desea. Pero es necesario incluir siempre el archivo style junto con los archivos multimedia incluidos en la exportación y el html que generó cuando exporto el chat.  
 
 AUTOR DEL PROGRAMA:
 	- Agustin Figueroa
