@@ -1,6 +1,6 @@
 DESCRIPICION:
 
-El siguiente programa tiene como objetivo visualizar la exportación de un chat de WhatsApp. Esto lo hace a partir de los archivos que WhatsApp provee luego de generar una exportación. La idea fundamental consiste en tomar el texto plano dado en la exportación y generar un archivo HTML en el cual este plasme de la mejor manera el chat exportado. En la exportación no se muestra el chat de WhatsApp tal como lo vemos en WhatsApp Web, por ejemplo, sino que la exportación genera un archivo de texto con el chat propiamente dicho y algunos archivos adjuntos más. Pero esto es ilegible, por lo tanto, la herramienta tiene como fin hacer que este texto plano con los archivos exportados represente un chat normal de WhatsApp. 
+El siguiente programa tiene como objetivo visualizar la exportación de un chat de WhatsApp. Esto lo hace a partir de los archivos que WhatsApp provee luego de generar dicha exportación. La idea fundamental consiste en tomar el archivo txt aportado y generar un archivo HTML el cual plasme el chat exportado en una interfaz mas amigable. La exportación no se muestra el chat de WhatsApp tal como lo vemos en la interfaz de WhatsApp Web por ejemplo, sino que la exportación genera un archivo de texto con el chat propiamente dicho y algunos archivos adjuntos más. Pero esto es ilegible, por lo tanto, la herramienta tiene como fin hacer que este texto plano con los archivos exportados se asemejen a la aplicación de mensajeía WhatsApp. 
 
 ESTADO DEL PROGRAMA. 
 
@@ -12,9 +12,9 @@ El chat exportado se recomienda que sea por vía bluetooth.
 
 INSTRUCCIONES PARA EL USO DEL PROGRAMA. 
 
-1° Copie los archivos sueltos del chat exportado en la carpeta llamada Fuente.
+1° Copie los archivos por la exportación en la carpeta llamada Fuente.
 
-2° Luego abra el archivo llamado index.html ubicado en la carpeta llamada Programa, esto hará que ejecute el programa en su navegador, una vez abierto realice lo siguiente: 
+2° Abra el archivo llamado index.html ubicado en la carpeta llamada Programa, esto hará que ejecute el programa en su navegador, una vez abierto realice lo siguiente: 
 
 	- Seleccione el chat que se encuentra en formato TXT dentro de la carpeta Fuente (copiada en el paso anterior).
 
@@ -30,8 +30,10 @@ INSTRUCCIONES PARA EL USO DEL PROGRAMA.
 
 4° Abra el archivo HTML llamado ChatdeWhatsApp dentro de la carpeta Fuente para poder visualizar el chat.  
 
+5° Puede copiar la carpeta Fuente en otro directorio y cambiarle el nombre para ser más especifico con lo que está trabajando si lo desea.
+
 OBSERVACIONES:
-	Puede copiar la carpeta fuente en otro directorio y cambiarle el nombre para ser más especifico con lo que está trabajando si lo desea. Pero es necesario incluir siempre el archivo style ,los archivos multimedia incluidos en la exportación y el html que generado para que pueda visualizar correctamente el chat junto con sus respectivos archivos. 
+	No elimine el archivo syle de Fuente, este archivo es necesario para poder mostrar los estilos del HTML generado. 
 
 AUTOR DEL PROGRAMA:
 	- Agustin Figueroa
