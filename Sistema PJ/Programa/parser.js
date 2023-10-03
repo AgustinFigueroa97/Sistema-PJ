@@ -8,7 +8,6 @@
 
     let ERfechayhora = /\d{1,2}\/\d{1,2}\/\d{2,4}(,)? \d{1,2}:\d{2}( (p. m.|a. m.))?/; // Si aparece un nuevo formato en una exportación, modificar un poco esta ER, no sacando, sino agregando y en general agregar con ? es decir 0 o 1 vez, para que los demás formatos se sigan respetando. 
     
-
     function download(filename, html) {
 
         var element = document.createElement('a');
@@ -22,11 +21,15 @@
     
     function funExportar(){
         
-        // No se tanto web, así que hacer esto lo vi viable xD
+        /* Nota: También se podría embeber el stilo y evitar copiar y pegar el archivo style en fuente. El hecho es que hay que tener cuidado con la interpolación porque pareciera que los estilos pueden interferir entre ellos, es decir hay que interpolar bien. Por el momento lo dejamos como está...*/
+
         if(flagArchivo === 1){
             let divChat = document.getElementById("idContenido").innerHTML;
+            let antes = /\.\.\/Fuente\//g; // El uso de la ER, junto con /g es para que replace no solo tome la primer aparición de la palabra fuente, sino todas las que haya. 
+            let ahora = "";
+            let divChatNuevo = divChat.replace(antes,ahora);
             let cadenahtml = ""; 
-            cadenahtml += "<!DOCTYPE html><html lang="+'"en"'+"> <head> <meta charset="+'"UTF-8"'+"><meta http-equiv="+"'X-UA-Compatible'"+" content="+"'IE=edge'"+"><meta name="+"'viewport'"+" content="+"'width=device-width, initial-scale=1.0'"+"><title>Chat Exportado</title> "+"<script src="+"'https://cdn.tailwindcss.com'"+"></script>"+"<link rel="+"'stylesheet'"+" href="+"'style.css'"+"></link>"+"<link href="+"'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css'"+" rel="+"'stylesheet'"+" integrity="+"'sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC'"+" crossorigin="+"'anonymous'"+">"+"<script src="+"'https://kit.fontawesome.com/fea845fb58.js'"+" crossorigin="+"'anonymous'"+"></script>"+"</head><body>"+ "<section class="+"'h-screen flex overflow-hidden'"+">" + "<div class="+"'bg-white w-2/12 p-6'"+"></div>"+ "<div class="+"'cuerpo w-8/12 overflow-auto'"+">" +" <p class="+"'gradiente px-20 py-6'"+ "style="+"'text-align: center; font-size: xx-large;'"+"> Chat de WhatsApp</p> <hr></hr>" +"<br>" +`${divChat}`+"</div>"+ "<div class="+"'bg-white w-2/12 p-6'"+"></div>" +"</section>"+"</body></html>";
+            cadenahtml += "<!DOCTYPE html><html lang="+'"en"'+"> <head> <meta charset="+'"UTF-8"'+"><meta http-equiv="+"'X-UA-Compatible'"+" content="+"'IE=edge'"+"><meta name="+"'viewport'"+" content="+"'width=device-width, initial-scale=1.0'"+"><title>Chat Exportado</title> "+"<script src="+"'https://cdn.tailwindcss.com'"+"></script>"+"<link rel="+"'stylesheet'"+" href="+"'style.css'"+"></link>"+"<link href="+"'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css'"+" rel="+"'stylesheet'"+" integrity="+"'sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC'"+" crossorigin="+"'anonymous'"+">"+"<script src="+"'https://kit.fontawesome.com/fea845fb58.js'"+" crossorigin="+"'anonymous'"+"></script>"+"</head><body>"+ "<section class="+"'h-screen flex overflow-hidden'"+">" + "<div class="+"'bg-white w-2/12 p-6'"+"></div>"+ "<div class="+"'cuerpo w-8/12 overflow-auto'"+">" +" <p class="+"'gradiente px-20 py-6'"+ "style="+"'text-align: center; font-size: xx-large;'"+"> Chat de WhatsApp</p> <hr></hr>" +"<br>" +`${divChatNuevo}`+"</div>"+ "<div class="+"'bg-white w-2/12 p-6'"+"></div>" +"</section>"+"</body></html>";
             let filename = "ChatDeWhatsapp.html";
             download(filename, cadenahtml);
         }else {
@@ -37,7 +40,6 @@
             }) 
         }
     }
-    
     
     function SeleccionarNombre() {
         let selection = document.getElementById("Nombres_Personas");
@@ -123,8 +125,6 @@
 
         let fechaytexto; 
 
-        let adicional = ""; 
-
         fechaytexto = sublinea.split(/\.? -/);/*  Esta expresión regular me permite particionar esta parte de un mensaje: 27/4/2022, 16:33" - "Papá: hola hijo todo bien? de esta manera en fecha y texto me quedaría por un lado toda la fecha y por otro, el nombre del auto junto con su mensaje, el hecho de haber incorporado también \.? en la ER es porque en algunos casos los mensajes estan de esta forma: 
         30/7/20 9:36 p. m". - "Papá: hola hijo todo bien? */
 
@@ -136,11 +136,7 @@
 
         //console.log(nombreytexto);
         
-        if(nombres.length === 1){
-            adicional = "- Actor Primario"; // Por default dejo - Actor primario, esto es porque lo único que varía en caso de que solo haya un actor es el nombre seleccionado, por lo cual si nombre+ Actor Primario es distinto de nombre seleccionado, significa que se selecciono el actor primario, caso contrario se habrá seleccioado el actor secundario. 
-        }
-        
-        if(nombreytexto[0]+adicional != " "+nombreSeleccionado){ // Solo lo cumplen los actores secundarios. 
+        if(nombreytexto[0] != " "+nombreSeleccionado){ // Solo lo cumplen los actores secundarios. 
             
             let divFlex1 = document.createElement("div");
 
@@ -219,7 +215,6 @@
             if (nombreytexto[1] === undefined) { // O sea que es un mensaje del sistema 
                 // Signica que no hay texto 
                 textGray1.textContent = "";
-                //console.log("Entro por acá lo que tiene nombreytexto es:" + nombreytexto[1]); 
             } else {
 
                 let mensaje = nombreytexto[1];
@@ -389,7 +384,7 @@
             divFlexCol1.appendChild(textGrayHora1);
 
         }else{
-    
+            
             let divFlex2 = document.createElement("div");
             divFlex2.classList.add('flex','mb-12','flex-row-reverse');
     
@@ -890,22 +885,15 @@
                 }
 
                 // Si no existen elementos, se crean... 
-                if(nombres.length === 1){
-                    const option1 = document.createElement('option');
-                    const option2 = document.createElement('option');
-                    option1.textContent = `${nombres[0]+"- Actor Primario"}`;
-                    option2.textContent = `${nombres[0]+"- Actor Secundario"}`;
-                    $nombresSelect.appendChild(option1);
-                    $nombresSelect.appendChild(option2);
-                }else{
-                    for (let index = 0; index < nombres.length; index++) {
-                        const option = document.createElement('option');
-                        option.textContent = `${nombres[index]}`;
-                        $nombresSelect.appendChild(option);
-                        //console.log(option);
-                    }
+                for (let index = 0; index < nombres.length; index++) {
+                    const option = document.createElement('option');
+                    option.textContent = `${nombres[index]}`;
+                    $nombresSelect.appendChild(option);
                 }
                 
+                const sinactor = document.createElement('option');
+                sinactor.textContent = "Sin autor Principal";
+                $nombresSelect.appendChild(sinactor);
                 
                 document.getElementById('contenido').value = contenido;
             }
@@ -938,13 +926,13 @@
     });
     
     
-    let btnTelefono = document.getElementById("BtnAgregar");
+    let btnAgregar = document.getElementById("BtnAgregar");
     
     let textArea = document.getElementById("contenidoTextArea");
     
     textArea.value = "";
     
-    btnTelefono.addEventListener("click",() =>{
+    btnAgregar.addEventListener("click",() =>{
     
         // Valor del telefono 
         let InputText = document.getElementById("InputTexto");
@@ -952,18 +940,29 @@
         const $nombresSelect = document.querySelector("#Nombres_Personas");
     
         const indice = $nombresSelect.selectedIndex;
-    
-        if(InputText.value != ""){
-            ArrayNameyText[indice].texto = InputText.value;
-            textArea.value = textArea.value + ArrayNameyText[indice].nombre + " - " +ArrayNameyText[indice].texto + "\n";
-        }else{
+
+        if(indice === ArrayNameyText.length){ // Es decir que seleccionaron el actor Principal. 
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'No ha aportado ninguna información!',
+                text: 'No es posible aportar información si no hay autor',
             })
+
+        }else{
+
+            if(InputText.value != ""){
+                ArrayNameyText[indice].texto = InputText.value;
+                textArea.value = textArea.value + ArrayNameyText[indice].nombre + " - " +ArrayNameyText[indice].texto + "\n";
+            }else{
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'No ha aportado información!',
+                })
+            }
+
         }
-    
+
         InputText.value = "";
     
         //console.log(ArrayNameyText);
