@@ -12,7 +12,7 @@ El chat exportado se recomienda que sea por vía bluetooth.
 
 INSTRUCCIONES PARA EL USO DEL PROGRAMA. 
 
-1° Copie los archivos por la exportación en la carpeta llamada Fuente.
+1° Copie los archivos entregados por la exportación en la carpeta llamada Fuente.
 
 2° Abra el archivo llamado index.html ubicado en la carpeta llamada Programa, esto hará que ejecute el programa en su navegador, una vez abierto realice lo siguiente: 
 
