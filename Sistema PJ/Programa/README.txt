@@ -16,7 +16,7 @@ INSTRUCCIONES PARA EL USO DEL PROGRAMA.
 
 2° Abra el archivo llamado index.html ubicado en la carpeta llamada Programa, esto hará que ejecute el programa en su navegador, una vez abierto realice lo siguiente: 
 
-	- Seleccione el chat que se encuentra en formato TXT dentro de la carpeta Fuente (copiada en el paso anterior).
+	- Seleccione el chat que se encuentra en formato TXT dentro de la carpeta Fuente copiada en el paso anterior.
 
 		- Haga uso de las herramientas que provee el programa.
 
