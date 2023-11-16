@@ -9,9 +9,8 @@
     let ERfechayhora = /\d{1,2}\/\d{1,2}\/\d{2,4}(,)? \d{1,2}:\d{2}( (p. m.|a. m.))?/; // Si aparece un nuevo formato en una exportación, modificar un poco esta ER, no sacando, sino agregando y en general agregar con ? es decir 0 o 1 vez, para que los demás formatos se sigan respetando. 
     
     function download(filename, html) {
-
         var element = document.createElement('a');
-        element.setAttribute('href', 'data:text/html;charset=utf-8,' +encodeURI(html));
+        element.setAttribute('href', 'data:text/html;charset=utf-8,' + encodeURIComponent(html));
         element.setAttribute('download', filename);
         element.style.display = 'none';
         document.body.appendChild(element);
