@@ -33,9 +33,7 @@ INSTRUCCIONES PARA EL USO DEL PROGRAMA.
 5° Puede copiar la carpeta Fuente en otro directorio y cambiarle el nombre para ser más específico con lo que está trabajando si lo desea.
 
 OBSERVACIONES:
-	- Para volver a utilizar la herramienta es recomendable que elimine todos los archivos de la carpeta Fuente excepto el archivo style incorporado con el programa. Una sugerencia para poder realizar esto, es que puede utilizar el atajo ctrl+e para seleccionar todos los archivos de la carpeta Fuente, posteriormente pulse ctrl+click-izquierdo sobre el archivo style para dejar de seleccionarlo y luego aprete la tecla Supr, de esta manera se eliminarán todos los archivos excepto style. 
-
-	- No es necesario que siempre elimine los archivos para poder utilizar el programa, pero si no lo hace se acumularán los chats en la carpeta llamada Fuente.  
+	- Para volver a utilizar la herramienta es recomendable que elimine todos los archivos de la carpeta Fuente. 
 
 AUTOR DEL PROGRAMA:
 	- Agustin Figueroa
