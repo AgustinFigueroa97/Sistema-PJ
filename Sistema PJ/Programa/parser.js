@@ -20,25 +20,42 @@
     
     function funExportar(){
         
-        /* Nota: También se podría embeber el stilo y evitar copiar y pegar el archivo style en fuente. El hecho es que hay que tener cuidado con la interpolación porque pareciera que los estilos pueden interferir entre ellos, es decir hay que interpolar bien. Por el momento lo dejamos como está...*/
-
-        if(flagArchivo === 1){
-            let divChat = document.getElementById("idContenido").innerHTML;
-            let antes = /\.\.\/Fuente\//g; // El uso de la ER, junto con /g es para que replace no solo tome la primer aparición de la palabra fuente, sino todas las que haya. 
-            let ahora = "";
-            let divChatNuevo = divChat.replace(antes,ahora);
-            let cadenahtml = ""; 
-            cadenahtml += "<!DOCTYPE html><html lang="+'"en"'+"> <head> <meta charset="+'"UTF-8"'+"><meta http-equiv="+"'X-UA-Compatible'"+" content="+"'IE=edge'"+"><meta name="+"'viewport'"+" content="+"'width=device-width, initial-scale=1.0'"+"><title>Chat Exportado</title> "+"<script src="+"'https://cdn.tailwindcss.com'"+"></script>"+"<link rel="+"'stylesheet'"+" href="+"'style.css'"+"></link>"+"<link href="+"'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css'"+" rel="+"'stylesheet'"+" integrity="+"'sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC'"+" crossorigin="+"'anonymous'"+">"+"<script src="+"'https://kit.fontawesome.com/fea845fb58.js'"+" crossorigin="+"'anonymous'"+"></script>"+"</head><body>"+ "<section class="+"'h-screen flex overflow-hidden'"+">" + "<div class="+"'bg-white w-2/12 p-6'"+"></div>"+ "<div class="+"'cuerpo w-8/12 overflow-auto'"+">" +" <p class="+"'gradiente px-20 py-6'"+ "style="+"'text-align: center; font-size: xx-large;'"+"> Chat de WhatsApp</p> <hr></hr>" +"<br>" +`${divChatNuevo}`+"</div>"+ "<div class="+"'bg-white w-2/12 p-6'"+"></div>" +"</section>"+"</body></html>";
-            let filename = "ChatDeWhatsapp.html";
-            download(filename, cadenahtml);
-        }else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'No se ha seleccionado ningún archivo!',
-            }) 
-        }
+    // No se tanto web, así que hacer esto lo vi viable xD
+    if(flagArchivo === 1){
+        let divChat = document.getElementById("idContenido").innerHTML;
+        let antes = /\.\.\/Fuente\//g; // El uso de la ER, junto con /g es para que replace no solo tome la primer aparición de la palabra fuente, sino todas las que haya. 
+        let ahora = "";
+        let divChatNuevo = divChat.replace(antes,ahora);
+        let cadenahtml = ""; 
+        cadenahtml += "<!DOCTYPE html><html lang='en'> <head> <meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Chat Exportado</title> "+"<script src='https://cdn.tailwindcss.com'></script><style>"+"/* Aquí va todo el contenido de tu CSS */"+
+        ".pull_left { float: left; }"+
+        ".pull_right { float: right; }"+
+        ".userpic { display: block; border-radius: 50%; overflow: hidden; }"+
+        ".userpic .initials { display: block; color: #fff; text-align: center; text-transform: uppercase; user-select: none; }"+
+        ".color_purple, .userpic5, .media_game .fill { background-color: #9884e8; }"+
+        ".color_orange, .userpic8, .media_contact .fill { background-color: #ff8c44; }"+
+        "body { margin: 0; font: 12px/18px 'Open Sans','Lucida Grande','Lucida Sans Unicode',Arial,Helvetica,Verdana,sans-serif; min-height: 90%; }"+
+        "html { height: 90%; }"+
+        ".cuerpo { background: #e5ddd5; }"+
+        ".gradiente { text-align: center; font-size: x-large; background: linear-gradient(#009688 0%,#009688 130px, #d9dbd5 130px, #d9dbd5 100%); color: white; }"+
+        "#ParrafoWhatsApp { color: white; }"+
+        ".margenDeArriba { margin-top: 10px; }"+
+        ".margenDeAbajo { margin-bottom: 10px; }"+
+        ".centrar { text-align: center; }"+
+        ".styleTextArea { border: 1px solid #ccc; }"+
+        "</style>"+
+        "<script src='https://kit.fontawesome.com/fea845fb58.js' crossorigin='anonymous'></script></head><body>"+ "<section class='h-screen flex overflow-hidden'>" + "<div class='bg-white w-2/12 p-6'></div>"+ "<div class='cuerpo w-8/12 overflow-auto'> <p class='gradiente px-20 py-6' style='text-align: center; font-size: xx-large;'> Chat de WhatsApp</p> <hr></hr><br>" +`${divChatNuevo}`+"</div>"+ "<div class='bg-white w-2/12 p-6'></div>" +"</section>"+"</body></html>";
+        let filename = "ChatDeWhatsapp.html";
+        download(filename, cadenahtml);
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'No se ha seleccionado ningún archivo!',
+        }) 
     }
+}
+
     
     function SeleccionarNombre() {
         let selection = document.getElementById("Nombres_Personas");
