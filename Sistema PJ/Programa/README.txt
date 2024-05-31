@@ -1,16 +1,11 @@
 DESCRIPCIÓN:
 
-El siguiente programa tiene como objetivo visualizar la exportación de un chat de WhatsApp. Esto lo hace a partir de los archivos que WhatsApp provee luego de generar dicha exportación. La idea fundamental consiste en tomar el archivo txt aportado y generar un archivo HTML el cual plasme el chat exportado en una interfaz más amigable. La exportación no se muestra el chat de WhatsApp tal como lo vemos en la interfaz de WhatsApp Web por ejemplo, sino que la exportación genera un archivo de texto con el chat propiamente dicho y algunos archivos adjuntos más. Pero esto es ilegible, por lo tanto, la herramienta tiene como fin hacer que este texto plano con los archivos exportados se asemejen a la aplicación de mensajería WhatsApp. 
+El siguiente programa tiene como objetivo visualizar la exportación de un chat de WhatsApp. Esto lo hace a partir de los archivos que WhatsApp provee luego de generar dicha exportación, es decir un archivo TXT y los archivos multimedia (si los hubiere). Esto se realiza debido a que los formatos de las conversaciones presentan ciertas dificultades respecto a su visualización, lo cual dificulta su posterior análisis para quiénes que tengan que hacer uso de este tipo de información. Entonces, la idea fundamental de la herramienta consiste en cargar archivo TXT de las conversaciones, junto con sus respectivos archivos multimedia en la herramienta y mostrar las conversaciones en una interfaz muy parecida a la de WhatsApp pero en una página HTML. 
 
-ESTADO DEL PROGRAMA. 
+ESTADO DEL PROGRAMA: 
+	El programa se encuentra en una versión beta.  
 
-El programa se encuentra en una versión beta.  
-
-RECOMENDACIONES
-
-El chat exportado se recomienda que sea por vía bluetooth.
-
-INSTRUCCIONES PARA EL USO DEL PROGRAMA. 
+INSTRUCCIONES PARA EL USO DEL PROGRAMA: 
 
 1° Copie los archivos entregados por la exportación en la carpeta llamada Fuente.
 
@@ -24,16 +19,16 @@ INSTRUCCIONES PARA EL USO DEL PROGRAMA.
 			2/11/22 - 6/12/22. 
 			- Agregar información a los participantes: esta opción permite agregar números de teléfonos, nombres o cualquier otra información que se considere relevante para cada participante del chat, basta con seleccionar la persona e ir agregando información con el botón agregar. 
 
-		- Inicie el parsing haciendo click en el botón Iniciar, esto hará que, en la zona de chats, se pueda visualizar toda la información del mismo, con la configuración elegida en el paso anterior. 
+			- Inicie el parsing haciendo click en el botón 'Iniciar', esto hará que, en el panel de chats, se pueda visualizar toda la información del mismo, incluso con las funcionalidades aplicadas sobre dicho chat.  
 
-3° Exporte el chat con el botón Exportar Chat, es importante que lo guarde en la carpeta llamada Fuente. Esto generará una descarga de todo el chat que se haya visualizado. 
+3° Exporte el chat con el botón 'Exportar Chat', es importante que lo guarde en la carpeta llamada Fuente. Esto generará una descarga de todo el chat que se haya visualizado. 
 
 4° Abra el archivo HTML llamado ChatdeWhatsApp dentro de la carpeta Fuente para poder visualizar el chat.  
 
-5° Puede copiar la carpeta Fuente en otro directorio y cambiarle el nombre para ser más específico con lo que está trabajando si lo desea.
+5° Puede copiar la carpeta 'Fuente' y moverla a otro directorio de su computadora. Además, puedes renombrar la carpeta para que sea más específica según la causa que estés tratando. 
 
 OBSERVACIONES:
 	- Para volver a utilizar la herramienta es recomendable que elimine todos los archivos de la carpeta Fuente. 
 
 AUTOR DEL PROGRAMA:
-	- Agustin Figueroa
+	- Agustin Figueroa 
