@@ -22,7 +22,7 @@ INSTRUCCIONES PARA EL USO DEL PROGRAMA:
 
 			- Inicie el parsing haciendo click en el botón 'Iniciar', esto hará que en el panel central llamado 'Chat de WhatsApp', se pueda visualizar el chat previamente cargado, con las configuraciones aplicadas sobre dicho chat.  
 
-3° Exporte el chat con el botón 'Exportar Chat', esto generará un archivo HTML con todo el chat, el cual debe guardarlo en la carpeta llamada Fuente. 
+3° Exporte el chat con el botón 'Exportar Chat', esto generará un archivo HTML, el cual debe guardarlo en la carpeta llamada Fuente. 
 
 4° Abra el archivo HTML generado en el paso anterior de la carpeta Funete, esto permitirá visualizar todo el chat dentro de dicho archivo. 
 
