@@ -9,23 +9,24 @@ INSTRUCCIONES PARA EL USO DEL PROGRAMA:
 
 1° Copie los archivos entregados por la exportación en la carpeta llamada Fuente.
 
-2° Abra el archivo llamado index.html ubicado en la carpeta llamada Programa, esto hará que ejecute el programa en su navegador, una vez abierto realice lo siguiente: 
+2° Abra el archivo llamado index.html ubicado en la carpeta llamada Programa, esto hará que la herramienta se ejecute en su navegador, una vez que se abrio su interfaz, realice los siguiente pasos: 
 
-	- Seleccione el chat que se encuentra en formato TXT dentro de la carpeta Fuente copiada en el paso anterior.
+	- Seleccione el chat que se encuentra en formato TXT dentro de la carpeta Fuente, la cual fue copiada en el paso anterior.
 
 		- Haga uso de las herramientas que provee el programa.
 
-			- Filtrar por fecha: esta opción permite elegir un rango de fechas donde solo se visualice el chat por el rango establecido, por ejemplo: 
+			- Filtrar por fecha: esta opción permite elegir un rango de fechas donde solo se visualizará el chat por el rango establecido, por ejemplo: 
 			2/11/22 - 6/12/22. 
+			- Seleccione el autor del chat: esta opción permite decidir que persona del chat, asumirá el rol de autor principal en la interfaz de la herramienta. De esta manera dicho autor, se ubicará en la parte derecha de la interfaz, y los demás actores en la parte izquierda.  
 			- Agregar información a los participantes: esta opción permite agregar números de teléfonos, nombres o cualquier otra información que se considere relevante para cada participante del chat, basta con seleccionar la persona e ir agregando información con el botón agregar. 
 
-			- Inicie el parsing haciendo click en el botón 'Iniciar', esto hará que, en el panel de chats, se pueda visualizar toda la información del mismo, incluso con las funcionalidades aplicadas sobre dicho chat.  
+			- Inicie el parsing haciendo click en el botón 'Iniciar', esto hará que en el panel de chats, se pueda visualizar el chat previamente cargado, con las configuraciones aplicadas sobre dicho chat.  
 
-3° Exporte el chat con el botón 'Exportar Chat', es importante que lo guarde en la carpeta llamada Fuente. Esto generará una descarga de todo el chat que se haya visualizado. 
+3° Exporte el chat con el botón 'Exportar Chat', esto generará un archivo HTML con todo el chat, el cual debe guardarlo en la carpeta llamada Fuente. 
 
-4° Abra el archivo HTML llamado ChatdeWhatsApp dentro de la carpeta Fuente para poder visualizar el chat.  
+4° Abra el archivo HTML generado en el paso anterior de la carpeta Funete, esto permitirá visualizar todo el chat dentro de dicho archivo. 
 
-5° Puede copiar la carpeta 'Fuente' y moverla a otro directorio de su computadora. Además, puedes renombrar la carpeta para que sea más específica según la causa que estés tratando. 
+5° Puede copiar la carpeta 'Fuente' y moverla a otro directorio de su computadora. Además, puedes renombrar la carpeta para que sea más específica según la causa que este tratando. 
 
 OBSERVACIONES:
 	- Para volver a utilizar la herramienta es recomendable que elimine todos los archivos de la carpeta Fuente. 
