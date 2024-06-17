@@ -24,9 +24,9 @@ INSTRUCCIONES PARA EL USO DEL PROGRAMA:
 
 3° Exporte el chat con el botón 'Exportar Chat', esto generará un archivo HTML, el cual debe guardarlo en la carpeta llamada Fuente. 
 
-4° Abra el archivo HTML generado en el paso anterior de la carpeta Funete, esto permitirá visualizar todo el chat dentro de dicho archivo. 
+4° Abra el archivo HTML (de la carpeta Fuente) generado en el paso anterior, dicho archivo permitirá visualizar el chat en un formato más legible. 
 
-5° Puede copiar la carpeta 'Fuente' y moverla a otro directorio de su computadora. Además, puedes renombrar la carpeta para que sea más específica según la causa que este tratando. 
+5° Puede copiar la carpeta 'Fuente' y moverla a otro directorio de su computadora si así lo desea. Además, puedes renombrar la carpeta para que sea más específica según la causa que este tratando. 
 
 OBSERVACIONES:
 	- Para volver a utilizar la herramienta es recomendable que elimine todos los archivos de la carpeta Fuente. 
