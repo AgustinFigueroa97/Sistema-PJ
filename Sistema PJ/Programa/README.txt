@@ -9,7 +9,7 @@ INSTRUCCIONES PARA EL USO DEL PROGRAMA:
 
 1° Copie los archivos entregados por la exportación en la carpeta llamada Fuente.
 
-2° Abra el archivo llamado index.html ubicado en la carpeta llamada Programa, esto hará que la herramienta se ejecute en su navegador, una vez que se abrio su interfaz, realice los siguiente pasos: 
+2° Abra el archivo llamado index.html ubicado en la carpeta llamada Programa, esto hará que la herramienta se ejecute en una página web HTML dentro de su navegador, posteriormente realice los siguiente pasos: 
 
 	- Seleccione el chat que se encuentra en formato TXT dentro de la carpeta Fuente, la cual fue copiada en el paso anterior.
 
