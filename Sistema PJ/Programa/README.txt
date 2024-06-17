@@ -20,7 +20,7 @@ INSTRUCCIONES PARA EL USO DEL PROGRAMA:
 			- Seleccione el autor del chat: esta opción permite decidir que persona del chat, asumirá el rol de autor principal en la interfaz de la herramienta. De esta manera dicho autor, se ubicará en la parte derecha de la interfaz, y los demás actores en la parte izquierda.  
 			- Agregar información a los participantes: esta opción permite agregar números de teléfonos, nombres o cualquier otra información que se considere relevante para cada participante del chat, basta con seleccionar la persona e ir agregando información con el botón agregar. 
 
-			- Inicie el parsing haciendo click en el botón 'Iniciar', esto hará que en el panel de chats, se pueda visualizar el chat previamente cargado, con las configuraciones aplicadas sobre dicho chat.  
+			- Inicie el parsing haciendo click en el botón 'Iniciar', esto hará que en el panel central llamado 'Chat de WhatsApp', se pueda visualizar el chat previamente cargado, con las configuraciones aplicadas sobre dicho chat.  
 
 3° Exporte el chat con el botón 'Exportar Chat', esto generará un archivo HTML con todo el chat, el cual debe guardarlo en la carpeta llamada Fuente. 
 
