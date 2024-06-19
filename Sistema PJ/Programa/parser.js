@@ -385,8 +385,25 @@
                 }else{
                     // Si no hay un archivo, tiene texto, pero no sabemos el texto no solo esta en una posición, sino en varias, por eso es que se elimina la primer posicion que corresponde al nombre y luego concateno el resto de los elementos del array, con el join... 
                     let message = nombreytexto.splice(1);  
-                    let mensajeFinal = message.join("");    
-                    textGray1.textContent = `${mensajeFinal}`;
+                    let mensajeFinal = message.join("");
+                    let a = document.createElement("a");
+                    let icon = document.createElement("i");
+                    let erLlamada = /^null$/;
+                    let erLlamadaperdida = /^Llamada perdida$/;
+
+                    if(erLlamada.test(mensajeFinal)){
+                        icon.classList.add('fa-solid','fa-phone','arrow-up-right','fa-2x');
+                        a.appendChild(icon);
+                        divBg_white1.appendChild(a);
+                        textGray1.textContent = 'Llamada'
+                    }else if(erLlamadaperdida.test(mensajeFinal)){
+                        icon.classList.add('fa-solid','fa-phone-slash','arrow-up-right','fa-2x');
+                        a.appendChild(icon);
+                        divBg_white1.appendChild(a);
+                        textGray1.textContent = 'Llamada perdida'
+                    }else{
+                        textGray1.textContent = `${mensajeFinal}`;
+                    }
                     divBg_white1.appendChild(textGray1);
                 }
 
@@ -608,10 +625,26 @@
                     }
 
                 }else{
-
                     let message = nombreytexto.splice(1);  
-                    let mensajeFinal = message.join("");    
-                    textGray2.textContent = `${mensajeFinal}`;
+                    let mensajeFinal = message.join("");
+                    let a = document.createElement("a");
+                    let icon = document.createElement("i");
+                    let erLlamada = /^null$/;
+                    let erLlamadaperdida = /^Llamada perdida$/;
+
+                    if(erLlamada.test(mensajeFinal)){
+                        icon.classList.add('fa-solid','fa-phone','arrow-up-right','fa-2x');
+                        a.appendChild(icon);
+                        divBg_white2.appendChild(a);
+                        textGray2.textContent = 'Llamada'
+                    }else if(erLlamadaperdida.test(mensajeFinal)){
+                        icon.classList.add('fa-solid','fa-phone-slash','arrow-up-right','fa-2x');
+                        a.appendChild(icon);
+                        divBg_white2.appendChild(a);
+                        textGray2.textContent = 'Llamada perdida'
+                    }else{
+                        textGray2.textContent = `${mensajeFinal}`;
+                    }
                     divBg_white2.appendChild(textGray2);
                 }
     
