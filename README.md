@@ -1,36 +1,95 @@
-# Visualizador de Exportación de Chat de WhatsApp
+# Sistema-PJ — Herramienta para Preservar y Visualizar Evidencia Digital de Aplicaciones de Mensajería Instantánea
 
-Este programa permite visualizar la exportación de un chat de WhatsApp utilizando archivos TXT y archivos multimedia asociados, proporcionados por WhatsApp después de generar la exportación. Esto es útil debido a las dificultades que presentan los formatos de las conversaciones para su visualización y análisis posterior.
+## Descripción
 
-## Estado del Programa
+Sistema-PJ es una herramienta de código abierto orientada al ámbito judicial que permite preservar y visualizar evidencia digital proveniente de aplicaciones de mensajería instantánea. Dado que los formatos de exportación de estas aplicaciones presentan dificultades para su lectura y análisis, la herramienta transforma esa información en una representación visual fiel a la interfaz original de la aplicación, facilitando la labor de peritos informáticos y operadores judiciales.
 
-Actualmente, el programa se encuentra en una versión beta.
+La herramienta fue desarrollada en el marco de una **Práctica Profesional Supervisada (PPS)** de la Licenciatura en Ciencias de la Computación, llevada a cabo en el **Departamento de Investigación de Delitos Complejos del Ministerio Público Fiscal de la Provincia de San Luis**, en virtud de un convenio con la **Facultad de Ciencias Físico Matemáticas y Naturales de la Universidad Nacional de San Luis**.
 
-## Instrucciones de Uso
+## Contexto de uso
 
-1. **Preparación de Archivos:**
-   - Copie los archivos entregados por la exportación de WhatsApp en la carpeta llamada `Fuente`.
+La evidencia digital obtenida de aplicaciones de mensajería es cada vez más frecuente en causas judiciales de diversa índole: grooming, extorsión, violencia doméstica, violencia de género, estafas, robos, entre otras. Uno de los procedimientos más comunes es el **aporte voluntario de evidencia**, donde los involucrados exportan sus conversaciones desde el dispositivo móvil y las presentan como prueba.
 
-2. **Ejecución del Programa:**
-   - Abra el archivo `index.html` ubicado en la carpeta `Programa` utilizando un navegador web. Esto ejecutará la herramienta en una página HTML dentro de su navegador.
+El problema es que el formato exportado —generalmente un archivo `.txt`— presenta cierto tecnicismo que lo hace ilegible para los operadores judiciales. Esta herramienta resuelve ese problema.
 
-3. **Configuración y Visualización:**
-   - Seleccione el archivo de chat en formato TXT dentro de la carpeta `Fuente`.
-   - Utilice las herramientas proporcionadas por el programa:
-     - **Filtrar por Fecha:** Permite seleccionar un rango de fechas para visualizar el chat.
-     - **Seleccionar Autor Principal:** Decide qué persona del chat será el autor principal en la interfaz.
-     - **Agregar Información de Participantes:** Permite añadir información relevante sobre los participantes del chat.
-   - Haga clic en el botón 'Iniciar' para comenzar el parsing. El chat se mostrará en el panel central llamado 'Chat de WhatsApp' con las configuraciones aplicadas.
+## Funcionalidades
 
-4. **Exportación:**
-   - Exporte el chat utilizando el botón 'Exportar Chat'. Esto generará un archivo HTML, que deberá guardarse en la carpeta `Fuente`.
+- Carga y parseo del archivo `.txt` exportado desde WhatsApp (Android)
+- Conversión a formato JSON estructurado
+- Visualización de la conversación en una interfaz tipo chat
+- Filtrado por rango de fechas
+- Identificación del titular de la cuenta
+- Soporte para mensajes con archivos multimedia adjuntos
+- Exportación del chat visualizado
 
-5. **Visualización del Chat Exportado:**
-   - Abra el archivo HTML generado en el paso anterior (ubicado en la carpeta `Fuente`) para visualizar el chat en un formato más legible.
+## Aplicaciones soportadas
 
-6. **Observaciones:**
-   - Se recomienda eliminar todos los archivos de la carpeta `Fuente` antes de volver a utilizar la herramienta.
+| Aplicación | Sistema Operativo | Estado |
+|---|---|---|
+| WhatsApp | Android | ✅ Disponible |
+| WhatsApp | iOS | 🔄 En desarrollo |
+| Telegram | — | 🔄 En desarrollo |
 
-## Autor del Programa
+## Estructura del repositorio
 
-- Agustín Figueroa 
+```
+Sistema-PJ/
+├── Analizador/        # Parser del archivo .txt exportado (Android)
+├── Visualizador/      # Interfaz visual del chat
+└── README.md
+```
+
+## Instrucciones de uso
+
+### WhatsApp Android
+
+1. Exportar la conversación desde WhatsApp en el dispositivo Android (sin multimedia o con multimedia).
+2. Guardar todos los archivos de exportación en la carpeta Fuente 
+3. Abrir `Analizador/AbrirArchivo.html` en el navegador.
+4. Cargar el archivo `.txt` exportado.
+5. Descargar el archivo JSON generado.
+6. Abrir `Visualizador/visualizador.html` en el navegador.
+7. Cargar el archivo JSON para visualizar la conversación.
+
+### WhatsApp iOS
+
+Próximamente disponible de forma integrada. El parser está en desarrollo.
+
+## Tecnologías utilizadas
+
+- HTML, CSS, JavaScript (interfaz y lógica del analizador Android)
+- Bootstrap 5
+- jQuery / Moment.js / DateRangePicker
+- SweetAlert2
+- Python (parsers en desarrollo para iOS y Telegram)
+
+## Estado del proyecto
+
+Versión actual: **beta**. La herramienta se encuentra en una etapa funcional para WhatsApp Android y está siendo extendida para soportar otras aplicaciones de mensajería.
+
+## Licencia
+
+Este proyecto se distribuye bajo la licencia **GNU General Public License v3.0 (GPL-3.0)**.
+
+Esto implica que cualquier uso, modificación o distribución del código debe:
+- Reconocer a los autores originales.
+- Distribuirse bajo la misma licencia.
+- Mantener el código fuente accesible.
+
+Para más detalles ver el archivo [LICENSE](./LICENSE).
+
+## Autores
+
+Este proyecto fue concebido y desarrollado por:
+
+| Rol | Nombre |
+|---|---|
+| Desarrollador | Agustín Mario Figueroa |
+| Director | Dr. Ing. Enrique Alfredo Miranda |
+| Co-Directora | Ma. Ing. Lorena Soledad Baigorria Fernandez |
+
+## Contribuciones
+
+Las contribuciones son bienvenidas. Si encontrás un bug, querés proponer una mejora o extender la herramienta a otras plataformas de mensajería.
+
+El único requisito es que cualquier desarrollo derivado mantenga el carácter de **código abierto y libre uso**.
