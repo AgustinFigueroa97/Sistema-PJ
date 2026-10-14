@@ -260,13 +260,14 @@ function MensajesDinamicos(nombreSeleccionado, id_div, iniciales1, iniciales2, m
             if(archivo != ""){ // Si hay archivo 
                 
                 let punto  = ".";
-
                 if(punto+arrNyE[1] === ".webp" || punto+arrNyE[1] === ".png" || punto+arrNyE[1] === ".jpg" || punto+arrNyE[1] === ".jpeg" || 
                 punto+arrNyE[1] === ".gif" || punto+arrNyE[1] === ".tiff"){ // TODO LO QUE TENGA QUE VER CON IMAGENES 
-                        
                     // <a title="Los Tejos" href="http://www.lostejos.com"><img src="casarural.jpg" alt="Los Tejos" /></a>
+
+
                     let a = document.createElement("a");
                     a.setAttribute('href',"../Fuente/"+`${(arrNyE[0]+punto+arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu,"")}`);
+
                     a.target = true;
                     let archivoImg = document.createElement("img");
                     
@@ -325,6 +326,8 @@ function MensajesDinamicos(nombreSeleccionado, id_div, iniciales1, iniciales2, m
                 }else if(punto+arrNyE[1] === ".mp3" || punto+arrNyE[1] === ".m4a" || punto+arrNyE[1] === ".aac" || punto+arrNyE[1] === ".wav" || punto+arrNyE[1] === ".aiff" || 
                 punto+arrNyE[1] === ".wma" || punto+arrNyE[1] === ".opus" || punto+arrNyE[1] === ".ogg"){ // TODO LO QUE TENGA QUE VER CON MUSICA.
                     let archivoMusica = document.createElement("audio");
+                    const path = `../Fuente/${(arrNyE[0] + punto + arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu, "")}`;
+                    console.log(path);
                     // <audio src="audio.mp3" preload="none" controls></audio>
                     archivoMusica.setAttribute('src',"../Fuente/"+`${(arrNyE[0]+punto+arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu,"")}`); 
                     archivoMusica.setAttribute('preload','none'); 
@@ -682,7 +685,7 @@ function CargarJSON(evento){
     console.log("Entre dentro de la funcion abrirArchivo");
 
     let archivo = evento.target.files[0]; // Este cero, es porque damos la posibilidad en este caso de abrir un archivo, se podría abrir mas si se le pone un atributo multiples al input.
-
+    console.log(archivo.name);
     let ArrayParaNombres = new Array();
 
     if(archivo){ // Si selecciono un archivo 
