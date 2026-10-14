@@ -69,6 +69,7 @@ function CrearArrayJSON(array){
     let msjCAS=""; // Mensaje Común o Archivo o del Sistema
     let nombre="";
     let nombreyextension="";
+    console.log(sublinea);
     fechaytexto = sublinea.replace(/^\[/, '').split(/\]\.?\s*/);
    // fechaytexto = sublinea.split(/\]\.?\s*/); /*  Esta expresión regular me permite particionar esta parte de un mensaje: 27/4/2022, 16:33" - "Papá: hola hijo todo bien? de esta manera en fecha y texto me quedaría por un lado toda la fecha y por otro, el nombre del auto junto con su mensaje, el hecho de haber incorporado también \.? en la ER es porque en algunos casos los mensajes estan de esta forma: 30/7/20 9:36 p. m". - "Papá: hola hijo todo bien? */
     let texto = fechaytexto[1];
@@ -83,12 +84,12 @@ function CrearArrayJSON(array){
         mensaje = nombreytexto[1]; // Me fijo ahora el tipo de mensaje...
 
         if (mensaje.includes('<adjunto: ')) {
-            console.log("mensaje adjunto");
+  //          console.log("mensaje adjunto");
             arrSplit = mensaje.split('<adjunto: ');
             nombreyextension = arrSplit[1].split('>')[0].trim();
             mensajeAuxiliar = nombreytexto.splice(2);
             msjCAS = mensajeAuxiliar.join(""); // El join me juntaria todos los mensajes que se hayan puesto después del archivo enviado.
-            console.log("A ver que tiene msjCAS en archivos: \n"+msjCAS);
+//            console.log("A ver que tiene msjCAS en archivos: \n"+msjCAS);
 
         }else{
             mensajeAuxiliar = nombreytexto.splice(1); // Elimino primer elemento, que corresponde al nombre del actor.
@@ -128,11 +129,10 @@ function GenerarMensajes(line){
     let actualIndex = 0;
     let flag = 0;
 
-    // Mejoramos la ER para que ignore espacios o caracteres invisibles al inicio
     let ERfechayhora = /\d{1,2}\/\d{1,2}\/\d{2,4},\s*\d{1,2}:\d{2}:\d{2}(?=\])/;
 
     let sublineaAuxiliar = "";
-
+    let mensajeTotal=""
     for (let index = 0; index < line.length; index++) { // Corregido a line.length para no perder la última
 
         let sublinea = line[index];
@@ -145,36 +145,20 @@ function GenerarMensajes(line){
         // Buscamos si la línea arranca con el corchete (permitiendo limpiar los invisibles antes)
         let esFecha = false;
         let primerCorchete = sublineaLimpia.indexOf('[');
-
         if (primerCorchete !== -1) {
             let porcionFecha = sublineaLimpia.substring(primerCorchete, primerCorchete + 25);
             esFecha = ERfechayhora.test(porcionFecha);
         }
 
         if (!esFecha) { // Si es un salto de línea (continuación de mensaje)
-
-            if(flag === 0){
-                actualIndex = index - 1;
-                line[actualIndex] = line[actualIndex].concat('\n' + sublinea);
-                line.splice(index, 1); // Usamos splice en lugar de split para borrar del array
-                index--; // Ajustamos el índice por el corrimiento
-                flag = 1;
-            } else {
-                line[actualIndex] = line[actualIndex].concat('\n' + sublinea);
-                line.splice(index, 1);
-                index--;
-            }
-
+            flag = 1;
             sublineaAuxiliar = line[actualIndex];
-
-            if(index === line.length - 1){
-                CrearArrayJSON(sublineaAuxiliar);
-            }
-
+            mensajeTotal= mensajeTotal + sublineaAuxiliar;
         } else { // Comienza el texto con fecha
 
             if(flag === 1){
-                CrearArrayJSON(sublineaAuxiliar);
+                CrearArrayJSON(mensajeTotal);
+                mensajeTotal="";
             }
 
             // Validamos de forma segura la siguiente línea
@@ -184,9 +168,10 @@ function GenerarMensajes(line){
 
                 if(siguienteEsFecha){
                     CrearArrayJSON(sublinea);
+
+                }else{
+                    mensajeTotal=sublinea;
                 }
-            } else {
-                CrearArrayJSON(sublinea);
             }
 
             flag = 0;
