@@ -1,4 +1,13 @@
 /* STYLES */
+.scroll-container {
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 250px;
+    background: #fafafa;
+}
 
 .pull_left {
     float: left;

@@ -40,7 +40,14 @@
             <label class="m-1 h5 text-sm"> Filtrar por Fecha</label>
 
             <input type="text" name="Fecha" id="Fecha" class="margenDeAbajo form-control" value="">
-            
+
+            <div id="scrollFechas" class="scroll-container margenDeAbajo">
+                <div class="item" style="color: #888; font-size: 0.85rem;">No hay fechas seleccionadas</div>
+            </div>
+            <button id="deleteBtn" type="button" class="m-1 btn btn-outline-danger btn-sm text-sm margenDeAbajo">Eliminar</button>
+            <br>
+            <br>
+
             <label class="m-1 h5 text-sm"> Seleccione el actor titular de la cuenta</label>
             <br>
 
@@ -50,7 +57,6 @@
             
             <label class="m-1 h5 text-sm"> Ingrese más información de los participantes</label>
             <br>
-
             <div class="input-group mb-3">
                 <span class="input-group-text text-sm" id="basic-addon1">Text</span>
                 <input id="InputTexto" type="text" class="m-1 form-control text-sm" placeholder="Escriba aquí" aria-label="Username" aria-describedby="basic-addon1">
@@ -92,14 +98,43 @@
     </section>
 
     <script type="text/javascript">
+        window.fechas = [];
+        let  selectedIndex = null;
+    function renderList() {
+        const scroll = document.getElementById('scrollFechas');
+        scroll.innerHTML = '';
 
+        if (!window.fechas || window.fechas.length === 0) {
+            scroll.innerHTML = '<div class="item text-muted" style="font-size: 0.85rem;">No hay fechas seleccionadas</div>';
+            selectedIndex = null;
+            return;
+        }
+
+        window.fechas.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'item';
+            div.textContent = `${index + 1}. ${item.display}`;
+            div.style.cursor = 'pointer';
+
+            if (index === selectedIndex) {
+                div.style.backgroundColor = '#e2e8f0';
+                div.style.fontWeight = 'bold';
+            }
+
+            div.addEventListener('click', () => {
+                selectedIndex = index;
+                renderList();
+            });
+            scroll.appendChild(div);
+        });
+    }
         $(function() {
             $('input[name="Fecha"]').daterangepicker({
                 autoUpdateInput: false,
                 locale: {
                 format: 'D/M/YY',
                 "separator": " - ",
-                "applyLabel": "Aplicar",
+                "applyLabel": "Agregar",
                 "cancelLabel": "Cancelar",
                 "fromLabel": "From",
                 "toLabel": "To",
@@ -131,16 +166,40 @@
             });
           });
 
-        $('input[name="Fecha"]').on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('D/M/YY') + ' - ' + picker.endDate.format('D/M/YY'));
-        });
+$('input[name="Fecha"]').on('apply.daterangepicker', function(ev, picker) {
+    let formattedRange = picker.startDate.format('D/M/YY') + ' - ' + picker.endDate.format('D/M/YY');
 
-        $('input[name="Fecha"]').on('cancel.daterangepicker', function(ev, picker) {
-            console.log($(this));
-        });
-        
-    
-    </script>
+    $(this).val(formattedRange);
+
+    if (!window.fechas) {
+        window.fechas = [];
+    }
+
+    window.fechas.push({
+        start: picker.startDate.format('D/M/YY'),
+        end: picker.endDate.format('D/M/YY'),
+        display: formattedRange
+    });
+    selectedIndex = window.fechas.length - 1;
+    renderList();
+    }
+);
+
+$('input[name="Fecha"]').on('cancel.daterangepicker', function(ev, picker) {
+    console.log($(this));
+});
+
+
+document.getElementById('deleteBtn').addEventListener('click', () => {
+    if (window.fechas && window.fechas.length > 0) {
+        let indexToRemove = (selectedIndex !== null && selectedIndex < window.fechas.length) ? selectedIndex : window.fechas.length - 1;
+        window.fechas.splice(indexToRemove, 1);
+        selectedIndex = null;
+        renderList();
+    }
+});
+
+</script>
 
     <!-- La etiqueta esta la pongo aca para que se carguen todos los elementos del dom, dado que si no hago esto cuando se haga referencia por ejemplo al id=archivoTexto no lo va a encontrar el script -->
 

@@ -6,6 +6,7 @@ let nombres = new Array();
 
 let ArrayNameyText = new Array();
 
+
 function download(filename, html) {
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/html;charset=utf-8,' + encodeURIComponent(html));
@@ -645,16 +646,25 @@ function CargarMensajesFront(){
     let iniciales1 = "U1";
     let iniciales2 = "U2";
     let msjDelSistema = "SistemaDeWhatsApp"; 
-
+    usaFiltro
     // Variables para Filtro Fecha 
     let flagFiltro = usaFiltro(); 
 
     if(flagFiltro){ // Creo las variables en caso de que se use el filtro
-        var valorFecha = document.getElementById("Fecha").value;
-        var fechaInicioFin = valorFecha.split('-');
-        var preDate = toMs(fechaInicioFin[0]);
-        var postDate = toMs(fechaInicioFin[1]);
+        //agrear array para soportar multiples fechas
+        var preDate=[];
+        var postDate=[];
+
+            window.fechas?.forEach(item => {
+                console.log("fecha 1 "+ item);
+                var fechaInicioFin = item.display.split('-');
+                preDate.push(toMs(fechaInicioFin[0].trim()));
+                postDate.push(toMs(fechaInicioFin[1].trim()));
+            });
+
     }
+
+
     
     for (let index = 0; index < ArrayJSON.length; index++) {
 
@@ -673,8 +683,10 @@ function CargarMensajesFront(){
         if(!flagFiltro){ // No uso filtro 
             MensajesDinamicos(nombreSeleccionado,id_div,iniciales1,iniciales2,msjDelSistema,nombre,archivo,archivoAux,mensaje,fechaYhora);
         }else{ // Uso filtro, aplico filtro para ver si invoco para mostrar o no. 
-            if((toMs(fechaJSON) >= preDate && toMs(fechaJSON) <= postDate)){   
-                MensajesDinamicos(nombreSeleccionado,id_div,iniciales1,iniciales2,msjDelSistema,nombre,archivo,archivoAux,mensaje,fechaYhora);
+            let fechaMs = toMs(fechaJSON);
+            let cumpleFiltro = preDate.some((pre, i) => fechaMs >= pre && fechaMs <= postDate[i]);
+            if (cumpleFiltro) {
+                MensajesDinamicos(nombreSeleccionado, id_div, iniciales1, iniciales2, msjDelSistema, nombre, archivo, archivoAux, mensaje, fechaYhora);
             }
         }
     }
