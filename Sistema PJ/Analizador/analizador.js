@@ -134,7 +134,7 @@ function CrearArrayJSONIOS(array){
         mensaje = nombreytexto[1]; // Me fijo ahora el tipo de mensaje...
 
         if (mensaje.includes('<adjunto: ')) {
-  //          console.log("mensaje adjunto");
+      console.log("mensaje adjunto");
             arrSplit = mensaje.split('<adjunto: ');
             nombreyextension = arrSplit[1].split('>')[0].trim();
             mensajeAuxiliar = nombreytexto.splice(2);
@@ -147,8 +147,7 @@ function CrearArrayJSONIOS(array){
         }
     }
 
-    fechaYhora = fechaytexto[0].split(/\,? /); // Me quedo con la hora y la fecha.
-
+    fechaYhora = fechaytexto[0].replace('[', '').split(/\,? /);
     ArrayObject.push({
         Nombre: nombre,
         Fecha: fechaYhora[0],
@@ -156,8 +155,6 @@ function CrearArrayJSONIOS(array){
         Mensaje: msjCAS,
         NameFileWhitExtension:nombreyextension
     });
-
-
 }
 
 function GenerarJSON(ArrayObject){
@@ -334,5 +331,4 @@ BtnGenerar.addEventListener("click", () => {
             text: 'No se ha seleccionado ningún archivo!',
         })
     }
-
 });

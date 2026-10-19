@@ -6,6 +6,8 @@ let nombres = new Array();
 
 let ArrayNameyText = new Array();
 
+let arrayArchivosFiltrados = new Array();
+
 
 function download(filename, html) {
     var element = document.createElement('a');
@@ -149,8 +151,7 @@ function CargarNombresFront(nombres){
 }
 
 function usaFiltro(){
-    let idFecha = document.getElementById("Fecha");
-    if(!(idFecha.value === "")){ // O sea si no es vacio, es porque se uso el filtro. 
+    if((window.fechas && window.fechas.length > 0)){ // O sea si no es vacio, es porque se uso el filtro.
         return true;
     }else{
         return false; 
@@ -687,6 +688,10 @@ function CargarMensajesFront(){
             let cumpleFiltro = preDate.some((pre, i) => fechaMs >= pre && fechaMs <= postDate[i]);
             if (cumpleFiltro) {
                 MensajesDinamicos(nombreSeleccionado, id_div, iniciales1, iniciales2, msjDelSistema, nombre, archivo, archivoAux, mensaje, fechaYhora);
+            }else{
+                //Si es multimedia lo agrego al archivo de mensajes a borrar
+                if(archivo!==""){
+                    arrayArchivosFiltrados.push(archivo);}
             }
         }
     }
@@ -845,4 +850,69 @@ BtnIniciar.addEventListener("click", () => {
         }) 
     }
     
+});
+
+
+let BtnDescargarFiltrados = document.getElementById("filtrarArchivosBtn");
+BtnDescargarFiltrados.addEventListener("click", () => {
+
+    //#region
+    /* Antes de cargar tengo que ver si tengo elementos en el div content
+     * Si es asi tengo que limpiar y luego volver a cargar.
+     * Esto funcion limpia el front, es decir yo deje a alguien seleccionado
+     * Y luego cambio para seleccionar queda lo anterior, entonces lo que tengo que hacer
+     * es limpiar. */
+    //#endregion
+
+    if(flagArchivo === 1){
+        let id = document.getElementById("idContenido");
+
+        while(id.firstChild) {
+            id.removeChild(id.firstChild);
+        }
+
+        console.log(ArrayJSON);
+
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Iniciando Parsing',
+            showConfirmButton: false,
+            timer: 800
+        })
+
+        //#region
+        /* Esta variable copiaLineas, es necesario para no trabajar directamente con el array line, dado que se va modificando, por lo cual no trabajamos sobre la referencia, sino sobre la copia por ejecución, porque si trabajaramos sobre el mismo array que es line, ese arreglo por ejecución va a hacer modificado y por tanto cuando se de iniciar nuevamente, trabajeremos sobre ese modificado y no es lo que se pretende*/
+        /* De todas formas este es un control, por si le dan iniciar iniciar iniciar varias veces sin recargar la pagina, digamos para hacerlo mas robusto */
+        //#endregion
+
+        let copiaJSON = [];
+
+        for (let index = 0; index < ArrayJSON.length; index++) {
+            copiaJSON[index] = ArrayJSON[index];
+        }
+
+        CargarMensajesFront(copiaJSON);
+        let contenidoTexto = arrayArchivosFiltrados.join("\n");
+
+        let link = document.createElement("a");
+
+        let file = new Blob([contenidoTexto], { type: "text/plain;charset=utf-8" });
+
+        link.href = URL.createObjectURL(file);
+        let resultado = window.fechas.map(item => `${item.start}+${item.end}`).join("+");
+        const name =  "archivosNoPertenecientes"+resultado+".txt";
+        link.download = name;
+        link.click();
+
+
+
+    }else{
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'No se ha seleccionado ningún archivo JSON!',
+        })
+    }
+
 });
