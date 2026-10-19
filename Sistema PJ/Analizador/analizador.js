@@ -200,31 +200,35 @@ function GenerarMensajesIOS(line){
 
         if (!esFecha) { // Si es un salto de línea (continuación de mensaje)
             flag = 1;
-            sublineaAuxiliar = line[actualIndex];
-            mensajeTotal= mensajeTotal + sublineaAuxiliar;
-        } else { // Comienza el texto con fecha
+            sublineaAuxiliar = line[index];
+            mensajeTotal += " \n " + sublineaAuxiliar;
 
-            if(flag === 1){
+        } else {
+
+            if (flag === 1) {
                 CrearArrayJSONIOS(mensajeTotal);
-                mensajeTotal="";
+                mensajeTotal = "";
+                flag = 0;
             }
 
-            // Validamos de forma segura la siguiente línea
-            if(index + 1 < line.length){
+
+            if (index + 1 < line.length) {
                 let siguienteLimpia = line[index + 1].replace(/[\u200e\u200f]/g, "").trim();
                 let siguienteEsFecha = siguienteLimpia.indexOf('[') !== -1 && ERfechayhora.test(siguienteLimpia);
 
-                if(siguienteEsFecha){
+                if (siguienteEsFecha) {
                     CrearArrayJSONIOS(sublinea);
-
-                }else{
-                    mensajeTotal=sublinea;
+                } else {
+                    mensajeTotal = sublinea;
+                    flag = 1;
                 }
+            } else {
+                CrearArrayJSONIOS(sublinea);
             }
-
-            flag = 0;
         }
-    }
+}
+
+
 
     GenerarJSON(ArrayObject);
 }
