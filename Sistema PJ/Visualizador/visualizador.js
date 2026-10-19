@@ -8,6 +8,7 @@ let ArrayNameyText = new Array();
 
 let arrayArchivosFiltrados = new Array();
 
+let arrayArchivosAlcanzados = new Array();
 
 function download(filename, html) {
     var element = document.createElement('a');
@@ -160,12 +161,9 @@ function usaFiltro(){
 
 function toMs(dateStr) {
     // desarmamos el string por los '-' los descartamos y lo transformamos en un array
-    let parts = dateStr.split("/");
+    let cleanDate = dateStr.replace(/[\u200E\u200F\u202A-\u202E]/g, "").trim();
+    let parts = cleanDate.split("/");
     let newStr;
-    console.log("parts[2] tiene: "+parts[2]); // año 
-    console.log("parts[1] tiene: "+parts[1]); // mes 
-    console.log("parts[0] tiene: "+parts[0]); // dia 
-    console.log("La longitud del año es: "+parts[2].length);
 
     if(parts[2].length === 4){
         newStr = parts[2].substring(2, parts[2].length);
@@ -683,19 +681,27 @@ function CargarMensajesFront(){
 
         if(!flagFiltro){ // No uso filtro 
             MensajesDinamicos(nombreSeleccionado,id_div,iniciales1,iniciales2,msjDelSistema,nombre,archivo,archivoAux,mensaje,fechaYhora);
+            if(archivo!==""){
+                arrayArchivosAlcanzados.push(archivo);}
+
         }else{ // Uso filtro, aplico filtro para ver si invoco para mostrar o no. 
             let fechaMs = toMs(fechaJSON);
+
             let cumpleFiltro = preDate.some((pre, i) => fechaMs >= pre && fechaMs <= postDate[i]);
+            console.log("fecha json: "+fechaJSON+"fecha: "+ fechaMs +" cumple: " + cumpleFiltro+"\n");
             if (cumpleFiltro) {
                 MensajesDinamicos(nombreSeleccionado, id_div, iniciales1, iniciales2, msjDelSistema, nombre, archivo, archivoAux, mensaje, fechaYhora);
-            }else{
+                if(archivo!==""){
+                    arrayArchivosAlcanzados.push(archivo);}
+            }
+            else{
                 //Si es multimedia lo agrego al archivo de mensajes a borrar
                 if(archivo!==""){
                     arrayArchivosFiltrados.push(archivo);}
-            }
+
         }
     }
-}
+}}
 
 function CargarJSON(evento){
     
@@ -900,13 +906,23 @@ BtnDescargarFiltrados.addEventListener("click", () => {
         let file = new Blob([contenidoTexto], { type: "text/plain;charset=utf-8" });
 
         link.href = URL.createObjectURL(file);
-        let resultado = window.fechas.map(item => `${item.start}+${item.end}`).join("+");
+        let resultado = window.fechas.map(item => `${item.start}-${item.end}`).join("+");
         const name =  "archivosNoPertenecientes"+resultado+".txt";
         link.download = name;
         link.click();
 
+        async function run() {
 
 
+            try {
+                console.log('Calculating combined hash...');
+                const resultHash = await generarReporte();
+                console.log('Final Combined Hash:', resultHash);
+            } catch (error) {
+                console.error('Error:', error.message);
+            }
+        }
+        run();
     }else{
         Swal.fire({
             icon: 'error',
@@ -916,3 +932,4 @@ BtnDescargarFiltrados.addEventListener("click", () => {
     }
 
 });
+
