@@ -218,17 +218,24 @@ function GenerarMensajesIOS(line){
 
                 if (siguienteEsFecha) {
                     CrearArrayJSONIOS(sublinea);
+                    mensajeTotal = "";
+
                 } else {
                     mensajeTotal = sublinea;
                     flag = 1;
                 }
             } else {
                 CrearArrayJSONIOS(sublinea);
+                mensajeTotal = "";
+
             }
         }
+
 }
 
-
+if (mensajeTotal !== "") {
+    CrearArrayJSONIOS(mensajeTotal);
+}
 
     GenerarJSON(ArrayObject);
 }
