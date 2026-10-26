@@ -10,6 +10,10 @@ let arrayArchivosFiltrados = new Array();
 
 let arrayArchivosAlcanzados = new Array();
 
+let capturasParticipantes = new Map();
+let multimediasAgregados = new Array();
+let capturasChat= new Array();
+
 function download(filename, html) {
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/html;charset=utf-8,' + encodeURIComponent(html));
@@ -123,6 +127,8 @@ function CargarNombresFront(nombres){
             texto:""
         }
         objNameYText.nombre = nombres[index];
+        objNameYText.texto = nombres[index];
+
         // Falta el texto 
         ArrayNameyText.push(objNameYText);
         
@@ -467,7 +473,7 @@ function MensajesDinamicos(nombreSeleccionado, id_div, iniciales1, iniciales2, m
             if(ArrayNameyText[ArrayNameyText.findIndex(isLargeNumber)].texto === "") // No agrego texto, pero encuentra un nombre 
                 mb1.textContent = `${nombre}`; // Nombre sin agregar info 
             else
-                mb1.textContent = `${nombre}` + " - "+ ArrayNameyText[ArrayNameyText.findIndex(isLargeNumber)].texto; // Nombre agregando info. 
+                mb1.textContent =  ArrayNameyText[ArrayNameyText.findIndex(isLargeNumber)].texto; // Nombre agregando info.
         }
 
         divBg_white1.appendChild(mb1);
@@ -766,6 +772,7 @@ exportar.addEventListener("click",funExportar);
 let InputArchivo = document.getElementById("ArchivoJSON");
 document.getElementById("ArchivoJSON").addEventListener('change',(e) => {
     CargarJSON(e);
+     document.getElementById('formBtn').disabled = e.target.files.length === 0;
 });
 
 // Evento Agregar Información 
@@ -788,8 +795,9 @@ btnAgregar.addEventListener("click",() =>{
     }else{
 
         if(InputText.value != ""){
-            ArrayNameyText[indice].texto = InputText.value;
+            ArrayNameyText[indice].texto = ArrayNameyText[indice].nombre+ " - " + InputText.value;
             textArea.value = textArea.value + ArrayNameyText[indice].nombre + " - " +ArrayNameyText[indice].texto + "\n";
+            console.log(ArrayNameyText);
         }else{
             Swal.fire({
                 icon: 'error',
@@ -860,7 +868,7 @@ BtnIniciar.addEventListener("click", () => {
 
 
 let BtnDescargarFiltrados = document.getElementById("filtrarArchivosBtn");
-BtnDescargarFiltrados.addEventListener("click", () => {
+BtnDescargarFiltrados.addEventListener("click", async () => {
 
     //#region
     /* Antes de cargar tengo que ver si tengo elementos en el div content
@@ -932,4 +940,151 @@ BtnDescargarFiltrados.addEventListener("click", () => {
     }
 
 });
+
+
+
+// Variables usadas para mantener el foco de las listas
+
+let selectedCapturaIndex=null;
+let selectedMultimediaIndex = null;
+let selectedParticipanteCapIndex = null;
+
+document.getElementById('formBtn').addEventListener('click', () => {
+
+    renderList("scrollParticipantes", ArrayNameyText.map(obj => Object.values(obj)[1]), selectedIndex, (nombreParticipante, index) => {
+        selectedIndex = index;
+
+        if (!capturasParticipantes.has(nombreParticipante)) {
+            capturasParticipantes.set(nombreParticipante, []);
+        }
+        selectedCapturaIndex = null;
+
+        renderList("scrollCapturasParticipantes", capturasParticipantes.get(nombreParticipante), selectedCapturaIndex, (capItem, capIndex) => {
+            selectedCapturaIndex = capIndex;
+        });
+    });
+}
+
+);
+
+//Funcion para seleccionar un archivo desde el explorador y agregar su informacion a un arreglo
+function agregarArrayDesdeArchivo(scrollId, array, onIndexChange, mode=true) {
+let input;
+    if(mode===true){
+     input = document.getElementById('imageInput');
+
+}else{
+    input = document.getElementById('fileInput');
+
+}
+
+    input.onchange = async (event) => {
+        const files = event.target.files;
+
+        if (files.length > 0) {
+            const leerArchivoComoPromesa = (file) => {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+
+                    reader.onload = (e) => {
+                        const fileToAdd = file.name;
+                        resolve(fileToAdd);
+                    };
+
+                    reader.onerror = (error) => reject(error);
+                    reader.readAsDataURL(file);
+                });
+            };
+
+            try {
+                const nuevosArchivos = await Promise.all(Array.from(files).map(leerArchivoComoPromesa));
+                array.push(...nuevosArchivos);
+                const nuevoIndex = array.length - 1;
+                onIndexChange(nuevoIndex);
+                renderList(scrollId, array, nuevoIndex, (item, index) => {
+                    onIndexChange(index);
+                });
+
+            } catch (error) {
+                console.error("Error al leer los archivos:", error);
+            }
+        }
+        input.value = '';
+    };
+    input.click();
+}
+
+//funcion para eliminar informacion de un arreglo que esta siendo renderizado como una lista
+function eliminarLista(scrollId, array, currentIndex, onIndexChange) {
+    if (array && array.length > 0) {
+        let indexToRemove = (currentIndex !== null && currentIndex < array.length) ? currentIndex : array.length - 1;
+
+        array.splice(indexToRemove, 1);
+
+        // Reseteamos o recalculamos el índice actual
+        const nuevoIndex = array.length > 0 ? Math.min(indexToRemove, array.length - 1) : null;
+        onIndexChange(nuevoIndex);
+
+        // Renderizamos de nuevo
+        renderList(scrollId, array, nuevoIndex, (item, index) => {
+            onIndexChange(index);
+        }
+    );
+    }
+}
+
+
+
+document.getElementById('agregarCapturaBtn').addEventListener('click',() => {
+    const nombre=ArrayNameyText[selectedIndex].nombre;
+    if (!capturasParticipantes.has(nombre)) {
+        capturasParticipantes.set(nombre, []);
+    }
+    agregarArrayDesdeArchivo('scrollCapturasParticipantes', capturasParticipantes.get(nombre), (nuevoIndex) => {
+        selectedParticipanteCapIndex = nuevoIndex;
+    });
+});
+
+
+document.getElementById('agregarMultimediaBtn').addEventListener('click',() => {
+    const descripcion = document.getElementById('inputDescripcionMultimedia').value;
+    agregarArrayDesdeArchivo('scrollMultimedia', multimediasAgregados, (nuevoIndex) => {
+        selectedMultimediaIndex = nuevoIndex;
+    },false);
+
+});
+
+
+document.getElementById('agregarCapturaChatBtn').addEventListener('click',() => {
+    agregarArrayDesdeArchivo('scrollCapturasChat', capturasChat, (nuevoIndex) => {
+        selectedCapturaIndex = nuevoIndex;
+    });
+});
+
+document.getElementById('eliminarMultimediaBtn').addEventListener('click', () => {
+    eliminarLista('scrollMultimedia', multimediasAgregados, selectedMultimediaIndex, (nuevoIndex) => {
+        selectedMultimediaIndex = nuevoIndex;
+    });
+});
+
+
+document.getElementById('eliminarCapturaChatBtn').addEventListener('click', () => {
+    eliminarLista('scrollCapturasChat', capturasChat, selectedCapturaIndex, (nuevoIndex) => {
+        selectedCapturaIndex = nuevoIndex;
+    });
+});
+
+document.getElementById('eliminarCapturaBtn').addEventListener('click', () => {
+    const nombre=ArrayNameyText[selectedIndex].nombre;
+    if (!capturasParticipantes.has(nombre)) {
+        capturasParticipantes.set(nombre, []);
+    }else{
+    eliminarLista('scrollCapturasParticipantes', capturasParticipantes.get(nombre), selectedParticipanteCapIndex, (nuevoIndex) => {
+        selectedParticipanteCapIndex = nuevoIndex;
+    });
+
+    }
+});
+
+
 
