@@ -1,6 +1,6 @@
     //funciones usadas para generar hashes
     const cachedFolderFiles = [];
-    async function generarHashes(arrayNombres,folder=1) {
+    async function generarHashes(arrayNombres,folder=1,origen) {
 
         if (!cachedFolderFiles[folder]) {
             return new Promise((resolve, reject) => {
@@ -25,7 +25,7 @@
         }
     }
 
-    async function procesarBuffersArchivos(arrayNombres, folderContents) {
+    async function procesarBuffersArchivos(arrayNombres, folderContents,origen) {
         const buffers = [];
         let hashes = [];
         for (const file of arrayNombres) {
@@ -50,7 +50,7 @@
                 const hashBuffer= await crypto.subtle.digest('SHA-256', buffer);
                 const hashArray = Array.from(new Uint8Array(hashBuffer));
                 const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-                hashes.push({name:file,hash:hashHex});
+                hashes.push({name:file,hash:hashHex,origen:origen});
                 console.log(hashHex);
             }
         }
@@ -87,13 +87,15 @@ async function exportarReporteHTML() {
         const listaMultimedia = typeof multimedia !== 'undefined' ? multimedia : (typeof multimediasAgregados !== 'undefined' ? multimediasAgregados : []);
         const rutaBaseImagenes = "";
         console.log(arrayArchivosAlcanzados);
-        const listaHashesMultimediasChat = await generarHashes(arrayArchivosAlcanzados,1);
-         listaHashesMultimediasChat.push(...await generarHashes(listaChat,2));
-         listaHashesMultimediasChat.push(...await generarHashes(listaMultimedia,2));
+        //Creo lista de hash y le concateno los hashes de todos los files
+        alert("Seleccione la carpeta de fuentes.");
+        const listaHashesMultimediasChat = await generarHashes(arrayArchivosAlcanzados,1,'Multimedias chat');
+        alert("Seleccione la carpeta con archivos adicionales.");
+         listaHashesMultimediasChat.push(...await generarHashes(listaChat,2,'Capturas del chat'));
+         listaHashesMultimediasChat.push(...await generarHashes(listaMultimedia,2,'Multimedias adicionales'));
         const mapaParticipantesPlano= [...new Set([...capturasParticipantes.values()].flat())]
         console.log(mapaParticipantesPlano);
-        listaHashesMultimediasChat.push(...await generarHashes(mapaParticipantesPlano,2));
-
+        listaHashesMultimediasChat.push(...await generarHashes(mapaParticipantesPlano,2, 'Captura participantes del chat'));
 
         const renderizarParticipantesHTML = () => {
             if (!arrayNombres || arrayNombres.length === 0) {
@@ -163,12 +165,30 @@ async function exportarReporteHTML() {
             let html = `
             <details class="sub-card" open>
             <summary><strong>Hashes Registrados</strong> (${listaHashesMultimediasChat.length} elementos)</summary>
-            <ul class="text-list">`;
+            <div class="table-responsive mt-2">
+            <table class="table table-bordered table-striped text-sm">
+            <thead>
+            <tr>
+            <th>Hash.</th>
+            <th>nombre</th>
+            <th>origen</th>
+            </tr>
+            </thead>
+            <tbody>`;
 
             listaHashesMultimediasChat.forEach(hash => {
-                html += `<li><code>${hash.hash} ${hash.name}</code></li>`;
+                html += `<tr>
+                <td><code>${hash.hash}</code></td>
+                <td>${hash.name}</td>
+                <td>${hash.origen}</td>
+                </tr>`;
             });
-            html += `</ul></details>`;
+
+            html += `   </tbody>
+            </table>
+            </div>
+            </details>`;
+
             return html;
         };
 
