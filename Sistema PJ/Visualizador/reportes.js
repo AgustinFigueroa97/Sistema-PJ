@@ -129,7 +129,7 @@ async function exportarReporteHTML() {
             return html;
         };
 
-        // 2. Renderizar Chat (Imágenes clickeables y desplegables)
+        // 2. Renderizado de imagenes
         const renderizarChatHTML = () => {
             if (!listaChat || listaChat.length === 0) {
                 return `<p class="empty">No hay capturas de chat registradas.</p>`;
@@ -154,7 +154,7 @@ async function exportarReporteHTML() {
             return html;
         };
 
-        // 3. Renderizar Hashes (Desplegable - Array de Strings)
+        // 3. calculo de hashes
         const renderizarHashesHTML = () => {
             if (!listaHashesMultimediasChat || listaHashesMultimediasChat.length === 0) {
                 return `<p class="empty">No hay hashes registrados.</p>`;
@@ -172,7 +172,7 @@ async function exportarReporteHTML() {
             return html;
         };
 
-        // 4. Renderizar Multimedia (Desplegable - Array de Strings Clickeables)
+        // 4. Renderizar Multimedia
         const renderizarMultimediaHTML = () => {
             if (!listaMultimedia || listaMultimedia.length === 0) {
                 return `<p class="empty">No hay elementos multimedia registrados.</p>`;
@@ -339,7 +339,6 @@ function guardarBorrador() {
             imei: document.getElementById('inputImeiDispositivo').value
         },
 
-        // Arrays o Maps convertidos correctamente (separados por comas, sin puntos y comas)
         ListaCapturasParticipantes: (typeof capturasParticipantes !== 'undefined' && capturasParticipantes instanceof Map)
         ? Array.from(capturasParticipantes.entries())
         : (capturasParticipantes || []),
@@ -351,7 +350,6 @@ function guardarBorrador() {
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
 
-    // Nombre del archivo corregido con el valor de PEX o 'borrador'
     downloadAnchor.setAttribute("download", `reporte_${numeroDeCausa}.json`);
 
     document.body.appendChild(downloadAnchor);
