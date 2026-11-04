@@ -1,116 +1,46 @@
-let flagArchivo = 0; 
-
-let ArrayJSON = new Array();
-
-let nombres = new Array(); 
-
+let nombres = new Array();
 let ArrayNameyText = new Array();
-
-let arrayArchivosFiltrados = new Array();
-
-let arrayArchivosAlcanzados = new Array();
-
-let capturasParticipantes = new Map();
+let jsonPath;
+// arreglos donde se mantienen los archivos extra agregados
 let multimediasAgregados = new Array();
+let capturasParticipantes = new Map();
 let capturasChat= new Array();
+// indice de las listas de archivos extras agregados
+let selectedCapturaIndex=null;
+let selectedMultimediaIndex = null;
+let selectedParticipanteCapIndex = null;
+let nombreSeleccionado;
 
-function download(filename, html) {
-    var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/html;charset=utf-8,' + encodeURIComponent(html));
-    element.setAttribute('download', filename);
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-}
-
-function funExportar() {
-    if (flagArchivo === 1) {
-        let divChat = document.getElementById("idContenido").innerHTML;
-        let divChatNuevo = divChat.replace(/\.\.\/Fuente\//g, "");
-
-        /* Importante, el orden de las librerias importa che, primero tiene que ir tailwind..., luego el contenido del script y luego boostrap, sino no se ve bien */
-
-        let cadenahtml = `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Chat Exportado</title>
-            <script src="https://cdn.tailwindcss.com"></script>
-            <style>
-                /* Aca va el contenido del CSS */
-                .pull_left { float: left; }
-                .pull_right { float: right; }
-                .userpic { display: block; border-radius: 50%; overflow: hidden; }
-                .userpic .initials { display: block; color: #fff; text-align: center; text-transform: uppercase; user-select: none; }
-                .color_purple, .userpic5, .media_game .fill { background-color: #9884e8; }
-                .color_orange, .userpic8, .media_contact .fill { background-color: #ff8c44; }
-                body { margin: 0; font: 12px/18px 'Open Sans','Lucida Grande','Lucida Sans Unicode',Arial,Helvetica,Verdana,sans-serif; min-height: 90%; }
-                html { height: 90%; }
-                .cuerpo { background: #e5ddd5; }
-                .gradiente {
-                    text-align: center;
-                    font-size: x-large;
-                    background: linear-gradient(#009688 0%,#009688 130px, #d9dbd5 130px, #d9dbd5 100%);
-                    color: white;
-                }
-                #ParrafoWhatsApp { color: white; }
-                .margenDeArriba { margin-top: 10px; }
-                .margenDeAbajo { margin-bottom: 10px; }
-                .centrar { text-align: center; }
-                .styleTextArea { border: 1px solid #ccc; }
-            </style>
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-        </head>
-        <body>
-            <section class="h-screen flex overflow-hidden">
-                <div class="bg-white w-2/12 p-6"></div>
-                <div class="cuerpo w-8/12 overflow-auto">
-                    <p class="gradiente px-20 py-6" style="text-align: center; font-size: xx-large;"> Conversación</p>
-                    <hr></hr>
-                    <br>
-                    ${divChatNuevo}
-                </div>
-                <div class="bg-white w-2/12 p-6"></div>
-            </section>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
-        </body>
-        </html>`;
-
-        let filename = "ChatDeWhatsapp.html";
-        download(filename, cadenahtml);
-    } else {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'No se ha seleccionado ningún archivo!',
-        });
+document.getElementById("Nombres_Personas").addEventListener("change", (event) => {
+    nombreSeleccionado = document.getElementById("Nombres_Personas").options[document.getElementById("Nombres_Personas").selectedIndex].value;
+    if(!nombreSeleccionado){
+            nombreSeleccionado = document.getElementById("Nombres_Personas").options[0].value;
     }
-}
-
-function SeleccionarNombre() {
-    let selection = document.getElementById("Nombres_Personas");
-    return selection.options[selection.selectedIndex];
-}
-
+});
 function GuardarNombres(Array_JSON){
     let primeraVez = 0;
     let arrayNombres = new Array();
-    let nombre;  
-    
-    for (let index = 0; index < Array_JSON.length; index++) {
-        nombre = ArrayJSON[index].Nombre;
+    let nombre;
 
-        if(nombre != "SistemaDeWhatsApp"){
-            if(primeraVez === 0){
-                arrayNombres.push(nombre);
-                primeraVez = 1; 
-            }else{
-                if(!arrayNombres.includes(nombre)){
+    // Make sure Array_JSON is valid before looping
+    if (!Array.isArray(Array_JSON)) {
+        return [];
+    }
+
+    for (let index = 0; index < Array_JSON.length; index++) {
+        // FIX: Use Array_JSON instead of ArrayJSON
+        let item = Array_JSON[index];
+        if (item && item.Nombre) {
+            nombre = item.Nombre; // or Array_JSON[index].Nombre
+
+            if(nombre != "SistemaDeWhatsApp"){
+                if(primeraVez === 0){
                     arrayNombres.push(nombre);
+                    primeraVez = 1;
+                }else{
+                    if(!arrayNombres.includes(nombre)){
+                        arrayNombres.push(nombre);
+                    }
                 }
             }
         }
@@ -128,7 +58,6 @@ function CargarNombresFront(nombres){
         }
         objNameYText.nombre = nombres[index];
         objNameYText.texto = nombres[index];
-
         // Falta el texto 
         ArrayNameyText.push(objNameYText);
         
@@ -157,14 +86,6 @@ function CargarNombresFront(nombres){
     
 }
 
-function usaFiltro(){
-    if((window.fechas && window.fechas.length > 0)){ // O sea si no es vacio, es porque se uso el filtro.
-        return true;
-    }else{
-        return false; 
-    }
-}
-
 function toMs(dateStr) {
     // desarmamos el string por los '-' los descartamos y lo transformamos en un array
     let cleanDate = dateStr.replace(/[\u200E\u200F\u202A-\u202E]/g, "").trim();
@@ -176,13 +97,12 @@ function toMs(dateStr) {
         console.log("El nuevo string tiene: "+newStr);
         return new Date(newStr, parts[1] - 1, parts[0]).getTime();
     }
-    
+
     return new Date(parts[2], parts[1] - 1, parts[0]).getTime();
 }
 
-function MensajesDinamicos(nombreSeleccionado, id_div, iniciales1, iniciales2, msjDelSistema, nombre, archivo, archivoAux, mensaje, fechaYhora){
-
-    if(nombre != nombreSeleccionado){ // Actores Secundarios y Sistema de WhatsApp 
+function MensajesDinamicos(chatFolderName, id_div, iniciales1, iniciales2, msjDelSistema, nombre, archivo, archivoAux, mensaje, fechaYhora){
+    if(nombre != nombreSeleccionado){ // Actores Secundarios y Sistema de WhatsApp
 
         let divFlex2 = document.createElement("div");
 
@@ -263,23 +183,32 @@ function MensajesDinamicos(nombreSeleccionado, id_div, iniciales1, iniciales2, m
 
         if(nombre != msjDelSistema){ 
 
-            if(archivo != ""){ // Si hay archivo 
+            if(archivo != ""){ // Si hay archivo
                 
                 let punto  = ".";
                 if(punto+arrNyE[1] === ".webp" || punto+arrNyE[1] === ".png" || punto+arrNyE[1] === ".jpg" || punto+arrNyE[1] === ".jpeg" || 
-                punto+arrNyE[1] === ".gif" || punto+arrNyE[1] === ".tiff"){ // TODO LO QUE TENGA QUE VER CON IMAGENES 
-                    // <a title="Los Tejos" href="http://www.lostejos.com"><img src="casarural.jpg" alt="Los Tejos" /></a>
+                punto+arrNyE[1] === ".gif" || punto+arrNyE[1] === ".tiff"){ // TODO LO QUE TENGA QUE VER CON IMAGENES
 
+                     let cleanFileName = (arrNyE[0] + punto + arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu, "").trim();
+                    let relativePath = `/chats_extracted/${chatFolderName}/fuentes/${cleanFileName}`;
 
-                    let a = document.createElement("a");
-                    a.setAttribute('href',"../Fuente/"+`${(arrNyE[0]+punto+arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu,"")}`);
+                    let a = document.createElement('a');
+                    a.setAttribute('href', relativePath);
+                    a.textContent = cleanFileName;
+                 a.addEventListener('click', function(event) {
+    event.preventDefault();
+    console.log("Opening file via pywebview:", relativePath);
 
-                    a.target = true;
+    if (pywebview && pywebview.api) {
+        const pathFile =`/fuentes/${cleanFileName}`;
+        pywebview.api.open_file_window(pathFile);    } else {
+        console.warn("pywebview API not available, falling back to window.open");
+        window.open(relativePath, '_blank');
+    }
+});
+
                     let archivoImg = document.createElement("img");
-                    
-                    //console.log("Lo que concateno tiene:"+arrNyE[0]+punto+arrNyE[1]);
-                    
-                    archivoImg.setAttribute('src',"../Fuente/"+`${(arrNyE[0]+punto+arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu,"")}`); // Tengo que agregarle el replace para eliminar los caracteres invsibles
+                    archivoImg.setAttribute('src', relativePath);
                     archivoImg.setAttribute('width','640');
                     archivoImg.setAttribute('height','480');
                     archivoImg.addEventListener('error', Error_Cargar,false);
@@ -306,11 +235,14 @@ function MensajesDinamicos(nombreSeleccionado, id_div, iniciales1, iniciales2, m
                 punto+arrNyE[1] === ".flv" || punto+arrNyE[1] === ".divx"){ // TODO LO QUE TENGA QUE VER CON VIDEOS.
                     // <video src="video.mp4" width="640" height="480"></video>
                     let archivoVideo = document.createElement("video");
-                    archivoVideo.setAttribute('src',"../Fuente/"+`${(arrNyE[0]+punto+arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu,"")}`); 
+                    let cleanFileName = (arrNyE[0] + punto + arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu, "").trim();
+                    let relativePath = `/chats_extracted/${chatFolderName}/fuentes/${cleanFileName}`;
+
+                    archivoVideo.setAttribute('src', relativePath);
                     archivoVideo.setAttribute('width','640');
                     archivoVideo.setAttribute('height','480');
                     archivoVideo.muted = true;
-                    archivoVideo.autoplay = true;
+                    archivoVideo.autoplay = false;
                     archivoVideo.loop = true;
                     archivoVideo.controls = true;
 
@@ -332,11 +264,11 @@ function MensajesDinamicos(nombreSeleccionado, id_div, iniciales1, iniciales2, m
                 }else if(punto+arrNyE[1] === ".mp3" || punto+arrNyE[1] === ".m4a" || punto+arrNyE[1] === ".aac" || punto+arrNyE[1] === ".wav" || punto+arrNyE[1] === ".aiff" || 
                 punto+arrNyE[1] === ".wma" || punto+arrNyE[1] === ".opus" || punto+arrNyE[1] === ".ogg"){ // TODO LO QUE TENGA QUE VER CON MUSICA.
                     let archivoMusica = document.createElement("audio");
-                    const path = `../Fuente/${(arrNyE[0] + punto + arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu, "")}`;
-                    console.log(path);
+                    let cleanFileName = (arrNyE[0] + punto + arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu, "").trim();
+                    let relativePath = `/chats_extracted/${chatFolderName}/fuentes/${cleanFileName}`;
+                    archivoMusica.setAttribute('src', relativePath);
                     // <audio src="audio.mp3" preload="none" controls></audio>
-                    archivoMusica.setAttribute('src',"../Fuente/"+`${(arrNyE[0]+punto+arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu,"")}`); 
-                    archivoMusica.setAttribute('preload','none'); 
+                    archivoMusica.setAttribute('preload','none');
                     archivoMusica.controls = true;
                     archivoMusica.addEventListener('error', Error_Cargar,false);
 
@@ -355,11 +287,25 @@ function MensajesDinamicos(nombreSeleccionado, id_div, iniciales1, iniciales2, m
                     
                 }else if(punto+arrNyE[1] === ".pdf" || punto+arrNyE[1] === ".doc" || punto+arrNyE[1] === ".docx" || punto+arrNyE[1] === ".txt" || 
                 punto+arrNyE[1] === ".odt" || punto+arrNyE[1] === ".xlsx" || punto+arrNyE[1] === ".pptx"){
-                    // FALTA CONTROLAR SI NO FALTA EL DOCUMENTO. 
+                    // FALTA CONTROLAR SI NO FALTA EL DOCUMENTO.
 
-                     let a = document.createElement("a");
-                     a.setAttribute('href',"../Fuente/"+`${(arrNyE[0]+punto+arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu,"")}`);
-                     a.target = true;
+                    let cleanFileName = (arrNyE[0] + punto + arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu, "").trim();
+                    let relativePath = `/chats_extracted/${chatFolderName}/fuentes/${cleanFileName}`;
+                     let a = document.createElement('a');
+                    a.setAttribute('href', relativePath);
+                  a.addEventListener('click', function(event) {
+    event.preventDefault();
+    console.log("Opening file via pywebview:", relativePath);
+
+    if (pywebview && pywebview.api) {
+        const pathFile =`/fuentes/${cleanFileName}`;
+
+        pywebview.api.open_file_window(pathFile);
+    } else {
+        console.warn("pywebview API not available, falling back to window.open");
+        window.open(relativePath, '_blank');
+    }
+});
                      let icon = document.createElement("i");
                      icon.classList.add('fa-regular','fa-file','fa-2x'); // Tengo que agregarle el replace para eliminar los caracteres invsibles
                      a.appendChild(icon);
@@ -371,15 +317,28 @@ function MensajesDinamicos(nombreSeleccionado, id_div, iniciales1, iniciales2, m
                 punto+arrNyE[1] === ".vcf" || punto+arrNyE[1] === ".dmg" || punto+arrNyE[1] === ".psd" || punto+arrNyE[1] === ".sql"){
                     // <i class="fa-duotone fa-file-zipper"></i> <i class="fa-solid fa-file-lines"></i>
 
-                    // FALTA CONTROLAR SI FALTAN ARCHIVOS. 
-
+                    // FALTA CONTROLAR SI FALTAN ARCHIVOS.
                     let a = document.createElement("a");
-                    a.setAttribute('href',"../Fuente/"+`${(arrNyE[0]+punto+arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu,"")}`);
-                    a.target = true;
+                    let cleanFileName = (arrNyE[0] + punto + arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu, "").trim();
+                    let relativePath = `/chats_extracted/${chatFolderName}/fuentes/${cleanFileName}`;
+                    a.setAttribute('href', relativePath);
+                    a.textContent = cleanFileName;
+                 a.addEventListener('click', function(event) {
+    event.preventDefault();
+    console.log("Opening file via pywebview:", relativePath);
+
+    if (pywebview && pywebview.api) {
+        const pathFile =`/fuentes/${cleanFileName}`;
+        pywebview.api.open_file_window(pathFile);
+    } else {
+        console.warn("pywebview API not available, falling back to window.open");
+        window.open(relativePath, '_blank');
+    }
+});
                     let icon = document.createElement("i");
 
                     icon.classList.add('fa-solid','fa-file-lines','fa-2x'); // Tengo que agregarle el replace para eliminar los caracteres invsibles
-                    
+
                     if(punto+arrNyE[1] === ".vcf"){
                         icon.classList.add('fa-solid','fa-user','fa-2x');
                         mensaje = archivo; // Si es un contacto, indico el nombre. 
@@ -493,14 +452,31 @@ function MensajesDinamicos(nombreSeleccionado, id_div, iniciales1, iniciales2, m
             punto+arrNyE[1] === ".gif" || punto+arrNyE[1] === ".tiff"){ // TODO LO QUE TENGA QUE VER CON IMAGENES 
                     
                 // <a title="Los Tejos" href="http://www.lostejos.com"><img src="casarural.jpg" alt="Los Tejos" /></a>
-                let a = document.createElement("a");
-                a.setAttribute('href',"../Fuente/"+`${(arrNyE[0]+punto+arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu,"")}`);
-                a.target = true;
+
+                   let cleanFileName = (arrNyE[0] + punto + arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu, "").trim();
+                    let relativePath = `/chats_extracted/${chatFolderName}/fuentes/${cleanFileName}`;
+
+                    let a = document.createElement('a');
+                    a.setAttribute('href', relativePath);
+
+                    a.textContent = cleanFileName;
+
+                    // Intercept click to open in a pywebview floating window instead of navigating normally
+                 a.addEventListener('click', function(event) {
+    event.preventDefault();
+    console.log("Opening file via pywebview:", relativePath);
+
+    if (pywebview && pywebview.api) {
+        const pathFile =`/fuentes/${cleanFileName}`;
+        pywebview.api.open_file_window(pathFile);    } else {
+        console.warn("pywebview API not available, falling back to window.open");
+        window.open(relativePath, '_blank');
+    }
+});
                 let archivoImg = document.createElement("img");
                 
                 //console.log("Lo que concateno tiene:"+arrNyE[0]+punto+arrNyE[1]);
-                
-                archivoImg.setAttribute('src',"../Fuente/"+`${(arrNyE[0]+punto+arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu,"")}`); // Tengo que agregarle el replace para eliminar los caracteres invsibles
+                archivoImg.setAttribute('src',relativePath); // Tengo que agregarle el replace para eliminar los caracteres invsibles
                 archivoImg.setAttribute('width','640');
                 archivoImg.setAttribute('height','480');
                 archivoImg.addEventListener('error', Error_Cargar,false);
@@ -526,12 +502,15 @@ function MensajesDinamicos(nombreSeleccionado, id_div, iniciales1, iniciales2, m
             }else if(punto+arrNyE[1] === ".mp4" || punto+arrNyE[1] === ".mkv" || punto+arrNyE[1] === ".avi" || punto+arrNyE[1] === ".mov" || 
             punto+arrNyE[1] === ".flv" || punto+arrNyE[1] === ".divx"){ // TODO LO QUE TENGA QUE VER CON VIDEOS.
                 // <video src="video.mp4" width="640" height="480"></video>
+                let cleanFileName = (arrNyE[0] + punto + arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu, "").trim();
+                    let relativePath = `/chats_extracted/${chatFolderName}/fuentes/${cleanFileName}`;
+
                 let archivoVideo = document.createElement("video");
-                archivoVideo.setAttribute('src',"../Fuente/"+`${(arrNyE[0]+punto+arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu,"")}`); 
+                archivoVideo.setAttribute('src',relativePath);
                 archivoVideo.setAttribute('width','640');
                 archivoVideo.setAttribute('height','480');
                 archivoVideo.muted = true;
-                archivoVideo.autoplay = true;
+                archivoVideo.autoplay = false;
                 archivoVideo.loop = true;
                 archivoVideo.controls = true;
 
@@ -554,7 +533,10 @@ function MensajesDinamicos(nombreSeleccionado, id_div, iniciales1, iniciales2, m
             punto+arrNyE[1] === ".wma" || punto+arrNyE[1] === ".opus" || punto+arrNyE[1] === ".ogg"){ // TODO LO QUE TENGA QUE VER CON MUSICA.
                 let archivoMusica = document.createElement("audio");
                 // <audio src="audio.mp3" preload="none" controls></audio>
-                archivoMusica.setAttribute('src',"../Fuente/"+`${(arrNyE[0]+punto+arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu,"")}`); 
+                let cleanFileName = (arrNyE[0] + punto + arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu, "").trim();
+                    let relativePath = `/chats_extracted/${chatFolderName}/fuentes/${cleanFileName}`;
+
+                archivoMusica.setAttribute('src', relativePath);
                 archivoMusica.setAttribute('preload','none'); 
                 archivoMusica.controls = true;
                 archivoMusica.addEventListener('error', Error_Cargar,false);
@@ -576,9 +558,25 @@ function MensajesDinamicos(nombreSeleccionado, id_div, iniciales1, iniciales2, m
             punto+arrNyE[1] === ".odt" || punto+arrNyE[1] === ".xlsx" || punto+arrNyE[1] === ".pptx"){
                 // FALTA CONTROLAR SI NO FALTA EL DOCUMENTO. 
 
-                    let a = document.createElement("a");
-                    a.setAttribute('href',"../Fuente/"+`${(arrNyE[0]+punto+arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu,"")}`);
-                    a.target = true;
+                       let cleanFileName = (arrNyE[0] + punto + arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu, "").trim();
+                    let relativePath = `/chats_extracted/${chatFolderName}/fuentes/${cleanFileName}`;
+
+                    let a = document.createElement('a');
+                    a.setAttribute('href', relativePath);
+
+                    a.textContent = cleanFileName;
+
+                 a.addEventListener('click', function(event) {
+    event.preventDefault();
+    console.log("Opening file via pywebview:", relativePath);
+
+    if (pywebview && pywebview.api) {
+        const pathFile =`/fuentes/${cleanFileName}`;
+        pywebview.api.open_file_window(pathFile);    } else {
+        console.warn("pywebview API not available, falling back to window.open");
+        window.open(relativePath, '_blank');
+    }
+});
                     let icon = document.createElement("i");
                     icon.classList.add('fa-regular','fa-file','fa-2x'); // Tengo que agregarle el replace para eliminar los caracteres invsibles
                     a.appendChild(icon);
@@ -592,9 +590,24 @@ function MensajesDinamicos(nombreSeleccionado, id_div, iniciales1, iniciales2, m
 
                 // FALTA CONTROLAR SI FALTAN ARCHIVOS. 
 
-                let a = document.createElement("a");
-                a.setAttribute('href',"../Fuente/"+`${(arrNyE[0]+punto+arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu,"")}`);
-                a.target = true;
+                   let cleanFileName = (arrNyE[0] + punto + arrNyE[1]).replace(/[\u{0080}-\u{FFFF}]/gu, "").trim();
+                    let relativePath = `/chats_extracted/${chatFolderName}/fuentes/${cleanFileName}`;
+                    let a = document.createElement('a');
+                    a.setAttribute('href', relativePath);
+                    a.textContent = cleanFileName;
+
+                    // Intercept click to open in a pywebview floating window instead of navigating normally
+                 a.addEventListener('click', function(event) {
+    event.preventDefault();
+    console.log("Opening file via pywebview:", relativePath);
+
+    if (pywebview && pywebview.api) {
+        const pathFile =`/fuentes/${cleanFileName}`;
+        pywebview.api.open_file_window(pathFile);    } else {
+        console.warn("pywebview API not available, falling back to window.open");
+        window.open(relativePath, '_blank');
+    }
+});
                 let icon = document.createElement("i");
 
                 if(punto+arrNyE[1] === ".vcf"){ // Si es el contacto de una persona, le hago un icono distinto porque es importante. 
@@ -644,136 +657,24 @@ function MensajesDinamicos(nombreSeleccionado, id_div, iniciales1, iniciales2, m
     }
 }
 
-function CargarMensajesFront(){
-
-    let nombreSeleccionado= SeleccionarNombre().value;
+function CargarMensajesFront(path){
     let id_div = document.getElementById("idContenido");
     let iniciales1 = "U1";
     let iniciales2 = "U2";
-    let msjDelSistema = "SistemaDeWhatsApp"; 
-    usaFiltro
-    // Variables para Filtro Fecha 
-    let flagFiltro = usaFiltro(); 
-
-    if(flagFiltro){ // Creo las variables en caso de que se use el filtro
-        //agrear array para soportar multiples fechas
-        var preDate=[];
-        var postDate=[];
-
-            window.fechas?.forEach(item => {
-                console.log("fecha 1 "+ item);
-                var fechaInicioFin = item.display.split('-');
-                preDate.push(toMs(fechaInicioFin[0].trim()));
-                postDate.push(toMs(fechaInicioFin[1].trim()));
-            });
-
-    }
-
-
-    
+    let msjDelSistema = "SistemaDeWhatsApp";
     for (let index = 0; index < ArrayJSON.length; index++) {
 
-        let nombre = ArrayJSON[index].Nombre; 
-
+        let nombre = ArrayJSON[index].Nombre;
         let archivo = ArrayJSON[index].NameFileWhitExtension;
-        
-        let archivoAux = ArrayJSON[index].NameFileWhitExtension; 
+        let archivoAux = ArrayJSON[index].NameFileWhitExtension;
+        let mensaje = ArrayJSON[index].Mensaje;
+        let fechaYhora = ArrayJSON[index].Fecha +" "+ArrayJSON[index].Hora;
 
-        let mensaje = ArrayJSON[index].Mensaje; 
-
-        let fechaYhora = ArrayJSON[index].Fecha +" "+ArrayJSON[index].Hora; 
-
-        let fechaJSON = ArrayJSON[index].Fecha;
-
-        if(!flagFiltro){ // No uso filtro 
-            MensajesDinamicos(nombreSeleccionado,id_div,iniciales1,iniciales2,msjDelSistema,nombre,archivo,archivoAux,mensaje,fechaYhora);
-            if(archivo!==""){
-                arrayArchivosAlcanzados.push(archivo);}
-
-        }else{ // Uso filtro, aplico filtro para ver si invoco para mostrar o no. 
-            let fechaMs = toMs(fechaJSON);
-
-            let cumpleFiltro = preDate.some((pre, i) => fechaMs >= pre && fechaMs <= postDate[i]);
-            console.log("fecha json: "+fechaJSON+"fecha: "+ fechaMs +" cumple: " + cumpleFiltro+"\n");
-            if (cumpleFiltro) {
-                MensajesDinamicos(nombreSeleccionado, id_div, iniciales1, iniciales2, msjDelSistema, nombre, archivo, archivoAux, mensaje, fechaYhora);
-                if(archivo!==""){
-                    arrayArchivosAlcanzados.push(archivo);}
-            }
-            else{
-                //Si es multimedia lo agrego al archivo de mensajes a borrar
-                if(archivo!==""){
-                    arrayArchivosFiltrados.push(archivo);}
-
-        }
-    }
-}}
-
-function CargarJSON(evento){
-    
-    console.log("Entre dentro de la funcion abrirArchivo");
-
-    let archivo = evento.target.files[0]; // Este cero, es porque damos la posibilidad en este caso de abrir un archivo, se podría abrir mas si se le pone un atributo multiples al input.
-    console.log(archivo.name);
-    let ArrayParaNombres = new Array();
-
-    if(archivo){ // Si selecciono un archivo 
-
-        console.log("Entre por que se abrio archivo");
-
-        let reader = new FileReader();
-
-        reader.onload = function(e){
-
-            let contenido = e.target.result;
-
-            let textArea = document.getElementById("contenido");
-
-            textArea.value = "";
-
-            if(ArrayNameyText.length > 0){
-                ArrayNameyText = []; 
-            }
-
-            ArrayJSON = JSON.parse(contenido); 
-
-            ArrayParaNombres = JSON.parse(contenido); 
-
-            nombres = GuardarNombres(ArrayParaNombres);
-
-            console.log('Nombres de los participantes', nombres); 
-
-            CargarNombresFront(nombres); 
-
-            document.getElementById('contenido').value = contenido;
-        }
-
-        flagArchivo = 1; // Esto lo vamos a utilizar para saber si se abrio o no el archivo.
-
-        reader.readAsText(archivo); // Queremos leer el contenido del archivo que ha cargado el usuario como texto.
-
-    }else{
-        
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'No se ha seleccionado un archivo!',
-          })
-       
-    }
-
+        MensajesDinamicos(path,id_div,iniciales1,iniciales2,msjDelSistema,nombre,archivo,archivoAux,mensaje,fechaYhora);
+}
 }
 
-// Evento Exportar Chat 
-let exportar = document.getElementById("idExportar"); 
-exportar.addEventListener("click",funExportar); 
 
-// Evento Abrir archivo JSON 
-let InputArchivo = document.getElementById("ArchivoJSON");
-document.getElementById("ArchivoJSON").addEventListener('change',(e) => {
-    CargarJSON(e);
-     document.getElementById('formBtn').disabled = e.target.files.length === 0;
-});
 
 // Evento Agregar Información 
 let btnAgregar = document.getElementById("BtnAgregar");
@@ -814,140 +715,40 @@ btnAgregar.addEventListener("click",() =>{
         
 });
 
-// Evento Iniciar
-let BtnIniciar = document.getElementById("Comenzar");
-BtnIniciar.addEventListener("click", () => {
+function open_file() {
+    const result = pywebview.api.open_file()
+   document.getElementById('formBtn').disabled =     result.res;
+    document.getElementById('participantesBtn').disabled =     result.res;
+    document.getElementById('mostrar').disabled     = result.res;
+    document.getElementById('Comenzar').disabled     = result.res;
+}
 
-    //#region 
-    /* Antes de cargar tengo que ver si tengo elementos en el div content
-    Si es asi tengo que limpiar y luego volver a cargar.
-    Esto funcion limpia el front, es decir yo deje a alguien seleccionado 
-    Y luego cambio para seleccionar queda lo anterior, entonces lo que tengo que hacer
-    es limpiar. */
-    //#endregion
-    
-    if(flagArchivo === 1){
-        let id = document.getElementById("idContenido");
-
-        while(id.firstChild) {
-            id.removeChild(id.firstChild);
-        }
-
-        console.log(ArrayJSON);
-
-        Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: 'Iniciando Parsing',
-            showConfirmButton: false,
-            timer: 800
-        })
-
-        //#region
-        /* Esta variable copiaLineas, es necesario para no trabajar directamente con el array line, dado que se va modificando, por lo cual no trabajamos sobre la referencia, sino sobre la copia por ejecución, porque si trabajaramos sobre el mismo array que es line, ese arreglo por ejecución va a hacer modificado y por tanto cuando se de iniciar nuevamente, trabajeremos sobre ese modificado y no es lo que se pretende*/
-        /* De todas formas este es un control, por si le dan iniciar iniciar iniciar varias veces sin recargar la pagina, digamos para hacerlo mas robusto */
-        //#endregion 
-
-        let copiaJSON = [];
-
-        for (let index = 0; index < ArrayJSON.length; index++) {
-            copiaJSON[index] = ArrayJSON[index];
-        }
-        
-        CargarMensajesFront(copiaJSON);
-
-    }else{
-        Swal.fire({
+async function  start_analysis() {
+    const app = document.getElementById("app");
+    const selection = app.value;
+    const result =  await pywebview.api.start_analyzer(selection, window.fechas);
+    let ArrayParaNombres = result.json;
+    nombres = GuardarNombres(ArrayParaNombres);
+    ArrayJSON = result.json;
+    jsonPath = result.path;
+    CargarNombresFront(nombres)
+    if(!nombreSeleccionado){
+            nombreSeleccionado = document.getElementById("Nombres_Personas").options[0].value;
+    }
+    Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'No se ha seleccionado ningún archivo JSON!',
-        }) 
-    }
-    
-});
-
-
-let BtnDescargarFiltrados = document.getElementById("filtrarArchivosBtn");
-BtnDescargarFiltrados.addEventListener("click", async () => {
-
-    //#region
-    /* Antes de cargar tengo que ver si tengo elementos en el div content
-     * Si es asi tengo que limpiar y luego volver a cargar.
-     * Esto funcion limpia el front, es decir yo deje a alguien seleccionado
-     * Y luego cambio para seleccionar queda lo anterior, entonces lo que tengo que hacer
-     * es limpiar. */
-    //#endregion
-
-    if(flagArchivo === 1){
-        let id = document.getElementById("idContenido");
-
-        while(id.firstChild) {
-            id.removeChild(id.firstChild);
-        }
-
-        console.log(ArrayJSON);
-
-        Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: 'Iniciando Parsing',
-            showConfirmButton: false,
-            timer: 800
+            text: 'Analisis finalizado',
         })
+}
 
-        //#region
-        /* Esta variable copiaLineas, es necesario para no trabajar directamente con el array line, dado que se va modificando, por lo cual no trabajamos sobre la referencia, sino sobre la copia por ejecución, porque si trabajaramos sobre el mismo array que es line, ese arreglo por ejecución va a hacer modificado y por tanto cuando se de iniciar nuevamente, trabajeremos sobre ese modificado y no es lo que se pretende*/
-        /* De todas formas este es un control, por si le dan iniciar iniciar iniciar varias veces sin recargar la pagina, digamos para hacerlo mas robusto */
-        //#endregion
-
-        let copiaJSON = [];
-
-        for (let index = 0; index < ArrayJSON.length; index++) {
-            copiaJSON[index] = ArrayJSON[index];
-        }
-
-        CargarMensajesFront(copiaJSON);
-        let contenidoTexto = arrayArchivosFiltrados.join("\n");
-
-        let link = document.createElement("a");
-
-        let file = new Blob([contenidoTexto], { type: "text/plain;charset=utf-8" });
-
-        link.href = URL.createObjectURL(file);
-        let resultado = window.fechas.map(item => `${item.start}-${item.end}`).join("+");
-        const name =  "archivosNoPertenecientes"+resultado+".txt";
-        link.download = name;
-        link.click();
-
-        async function run() {
-
-
-            try {
-                console.log('Calculating combined hash...');
-                const resultHash = await generarReporte();
-                console.log('Final Combined Hash:', resultHash);
-            } catch (error) {
-                console.error('Error:', error.message);
-            }
-        }
-        run();
-    }else{
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'No se ha seleccionado ningún archivo JSON!',
-        })
+function recargarMensajes(){
+    let id = document.getElementById("idContenido");
+     while(id.firstChild) {
+        id.removeChild(id.firstChild);
     }
-
-});
-
-
-
-// Variables usadas para mantener el foco de las listas
-
-let selectedCapturaIndex=null;
-let selectedMultimediaIndex = null;
-let selectedParticipanteCapIndex = null;
+        CargarMensajesFront(jsonPath);
+}
 
 document.getElementById('formBtn').addEventListener('click', () => {
 
@@ -967,72 +768,65 @@ document.getElementById('formBtn').addEventListener('click', () => {
 
 );
 
-//Funcion para seleccionar un archivo desde el explorador y agregar su informacion a un arreglo
-function agregarArrayDesdeArchivo(scrollId, array, onIndexChange, mode=true) {
-let input;
-    if(mode===true){
-     input = document.getElementById('imageInput');
+async function generarReporte(event){
+    event.preventDefault();
+const datosFormulario = {
+        pex: document.getElementById('inputPEX').value,
+        fecha_reporte: document.getElementById('inputFechaReporte').value
+    };
 
-}else{
-    input = document.getElementById('fileInput');
+    const perito = {
+        nombre: document.getElementById('inputNombrePerito').value,
+        apellido: document.getElementById('inputApellidoPerito').value,
+        dependencia: document.getElementById('inputDependenciaPerito').value
+    };
 
+    const aportante = {
+        nombre: document.getElementById('inputNombreAportante').value,
+        apellido: document.getElementById('inputApellidoAportante').value,
+        dni: document.getElementById('inputDNIAportante').value
+    };
+
+    const dispositivo = {
+        marca: document.getElementById('inputMarcaDispositivo').value,
+        modelo: document.getElementById('inputModeloDispositivo').value,
+        imei: document.getElementById('inputImeiDispositivo').value
+    };
+
+    let res = await pywebview.api.gen_repo(perito,aportante,dispositivo,datosFormulario,Object.fromEntries(capturasParticipantes),multimediasAgregados,capturasChat,nombres);
 }
-
-    input.onchange = async (event) => {
-        const files = event.target.files;
-
-        if (files.length > 0) {
-            const leerArchivoComoPromesa = (file) => {
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-
-                    reader.onload = (e) => {
-                        const fileToAdd = file.name;
-                        resolve(fileToAdd);
-                    };
-
-                    reader.onerror = (error) => reject(error);
-                    reader.readAsDataURL(file);
-                });
-            };
-
-            try {
-                const nuevosArchivos = await Promise.all(Array.from(files).map(leerArchivoComoPromesa));
-                array.push(...nuevosArchivos);
-                const nuevoIndex = array.length - 1;
-                onIndexChange(nuevoIndex);
-                renderList(scrollId, array, nuevoIndex, (item, index) => {
+async function agregarArrayDesdeArchivo(scrollId,array,onIndexChange,mode, loc){
+ let res = await pywebview.api.add_other(mode, loc);
+ if(res.files.length>0){
+ array.push(...res.files);
+ const nuevoIndex = array.length - 1;
+ onIndexChange(nuevoIndex);
+   renderList(scrollId, array, nuevoIndex, (item, index) => {
                     onIndexChange(index);
                 });
-
-            } catch (error) {
-                console.error("Error al leer los archivos:", error);
-            }
-        }
-        input.value = '';
-    };
-    input.click();
+ }
 }
 
-//funcion para eliminar informacion de un arreglo que esta siendo renderizado como una lista
-function eliminarLista(scrollId, array, currentIndex, onIndexChange) {
-    if (array && array.length > 0) {
-        let indexToRemove = (currentIndex !== null && currentIndex < array.length) ? currentIndex : array.length - 1;
-
-        array.splice(indexToRemove, 1);
-
-        // Reseteamos o recalculamos el índice actual
-        const nuevoIndex = array.length > 0 ? Math.min(indexToRemove, array.length - 1) : null;
-        onIndexChange(nuevoIndex);
-
-        // Renderizamos de nuevo
-        renderList(scrollId, array, nuevoIndex, (item, index) => {
+async function eliminarLista(scrollId,array,onIndexChange,indexToRemove, loc){
+    const file = array[indexToRemove];
+    const res = await pywebview.api.del_other(file, loc);
+     if(res.res){
+         array.splice(indexToRemove, 1)
+    const nuevoIndex = array.length > 0 ? Math.min(indexToRemove, array.length - 1) : null;
+         onIndexChange(nuevoIndex);
+    renderList(scrollId, array, nuevoIndex, (item, index) => {
             onIndexChange(index);
-        }
-    );
-    }
+            }
+        );
+     }
 }
 
+
+document.getElementById('agregarMultimediaBtn').addEventListener('click',() => {
+    agregarArrayDesdeArchivo('scrollMultimedia', multimediasAgregados, (nuevoIndex) => {
+        selectedMultimediaIndex = nuevoIndex;
+    },"", "adicionales");
+});
 
 
 document.getElementById('agregarCapturaBtn').addEventListener('click',() => {
@@ -1042,36 +836,31 @@ document.getElementById('agregarCapturaBtn').addEventListener('click',() => {
     }
     agregarArrayDesdeArchivo('scrollCapturasParticipantes', capturasParticipantes.get(nombre), (nuevoIndex) => {
         selectedParticipanteCapIndex = nuevoIndex;
-    });
-});
-
-
-document.getElementById('agregarMultimediaBtn').addEventListener('click',() => {
-    const descripcion = document.getElementById('inputDescripcionMultimedia').value;
-    agregarArrayDesdeArchivo('scrollMultimedia', multimediasAgregados, (nuevoIndex) => {
-        selectedMultimediaIndex = nuevoIndex;
-    },false);
-
-});
-
+    },"img", "capturas_"+nombre);
+        console.log(capturasParticipantes);
+}
+);
 
 document.getElementById('agregarCapturaChatBtn').addEventListener('click',() => {
     agregarArrayDesdeArchivo('scrollCapturasChat', capturasChat, (nuevoIndex) => {
         selectedCapturaIndex = nuevoIndex;
-    });
+    },"img", "capturas_chat");
 });
 
 document.getElementById('eliminarMultimediaBtn').addEventListener('click', () => {
-    eliminarLista('scrollMultimedia', multimediasAgregados, selectedMultimediaIndex, (nuevoIndex) => {
+    eliminarLista('scrollMultimedia', multimediasAgregados, (nuevoIndex) => {
         selectedMultimediaIndex = nuevoIndex;
-    });
+    },selectedMultimediaIndex,"adicionales");
 });
 
 
 document.getElementById('eliminarCapturaChatBtn').addEventListener('click', () => {
-    eliminarLista('scrollCapturasChat', capturasChat, selectedCapturaIndex, (nuevoIndex) => {
+    console.log(selectedCapturaIndex  );
+    console.log(capturasChat[selectedCapturaIndex]);
+    eliminarLista('scrollCapturasChat', capturasChat, (nuevoIndex) => {
         selectedCapturaIndex = nuevoIndex;
-    });
+    },selectedCapturaIndex,"capturas_chat");
+
 });
 
 document.getElementById('eliminarCapturaBtn').addEventListener('click', () => {
@@ -1079,12 +868,8 @@ document.getElementById('eliminarCapturaBtn').addEventListener('click', () => {
     if (!capturasParticipantes.has(nombre)) {
         capturasParticipantes.set(nombre, []);
     }else{
-    eliminarLista('scrollCapturasParticipantes', capturasParticipantes.get(nombre), selectedParticipanteCapIndex, (nuevoIndex) => {
+    eliminarLista('scrollCapturasParticipantes', capturasParticipantes.get(nombre), (nuevoIndex) => {
         selectedParticipanteCapIndex = nuevoIndex;
-    });
-
+    },selectedParticipanteCapIndex,"capturas_"+nombre);
     }
 });
-
-
-
